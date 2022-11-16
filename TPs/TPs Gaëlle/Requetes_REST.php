@@ -9,7 +9,7 @@
 <table>
     <tbody>
 <?php
-for ($i = 1; $i <= 200; $i++){
+for ($i = 1; $i <= 20; $i++){
     $json = file_get_contents('https://pokeapi.co/api/v2/pokemon/'.$i);
     $info=json_decode($json,true);
     echo "<tr><td>".$info['id']."</td>";
