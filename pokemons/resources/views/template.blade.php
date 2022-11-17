@@ -8,13 +8,10 @@
         <title>Pokemons</title>
 </head>
 <content>
-    <?php
-        require_once "listePokemon.blade.php";
-    ?>
+    test
+    @yield('content')
 </content>
 <footer>
-    <?php 
-        echo"Ceci est un pied de page"
-    ?>
+    Ceci est un pied de page
 </footer>
 </html>

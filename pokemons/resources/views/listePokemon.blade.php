@@ -1,7 +1,4 @@
-<!doctype html>
-    <html lang="{{ app()->getLocale() }}">
-        <?php
-            echo "Ca fontionne?"
-        ?>
-    </html>
-    
+@extends('template')
+@section('content')
+        Ca fontionne?
+@endsection
