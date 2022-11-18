@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 
 class listePokemonsController extends Controller
 {
-    function appel_template($prenom){
-        return view('listePokemon', ['prenom' => $prenom]);
+    function appel_template(){
+        return view('listePokemon');
     }
     //
 }

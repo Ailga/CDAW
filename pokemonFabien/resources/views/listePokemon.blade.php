@@ -1,4 +1,11 @@
 @extends('template')
 @section('content')
-        Ca fontionne? {{$prenom}}
+
+<?php
+//echo "Ca fontionne? {{$prenom}}";
+
+
+echo "<h1>Bestiaire pokemons</h1>";
+
+?>
 @endsection
