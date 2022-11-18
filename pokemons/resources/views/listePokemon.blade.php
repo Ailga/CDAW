@@ -1,4 +1,4 @@
 @extends('template')
 @section('content')
-        Ca fontionne?
+        Ca fontionne? {{$prenom}}
 @endsection

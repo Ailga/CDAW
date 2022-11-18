@@ -22,7 +22,4 @@ Route::get('/{prenom}/{nom}', function ($prenom, $nom) {
 
 })->where('prenom','[A-Za-z]+')->where('nom','[A-Za-z]+');
 
-Route::get('/{prenom}', 'listePokemonsController@appel_template', function ($prenom) {
-    
-
-});
+Route::get('/{prenom}', 'listePokemonsController@appel_template');
