@@ -8,7 +8,6 @@
         <title>Pokemons</title>
 </head>
 <content>
-    test
     @yield('content')
 </content>
 <footer>
