@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEnergyTable extends Migration
+class CreatePokemonTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateEnergyTable extends Migration
      */
     public function up()
     {
-        Schema::create('energy', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('pokemon', function (Blueprint $table) {
+            $table->id();
             $table->string('name');
-            $table->timestamps();
+            $table->string('energy');
+            $table->integer('pv_max');
+            $table->integer('level');
+            $table->string('pathImg');
         });
     }
 
@@ -27,7 +30,6 @@ class CreateEnergyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('energy');
+        Schema::dropIfExists('pokemon');
     }
 }
-?>
