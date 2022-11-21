@@ -35,8 +35,6 @@ $(document).ready(function () {
         divNewUsers.innerHTML = divNewUsers.innerHTML + "<p> Un nouveau text n°" + indexNewComment + "</p>";
         divNewUsers.appendChild(newBtnModify);
         divNewUsers.appendChild(newBtnRemove);
-        let NewModifier = document.getElementsByClassName("modify");
-        let NewRemover = document.getElementsByClassName("remove");
         newBtnModify.addEventListener("click", modify);
         newBtnRemove.addEventListener("click", deleter);
     })
