@@ -14,11 +14,18 @@ class CreatePokemonTable extends Migration
     public function up()
     {
         Schema::create('pokemon', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('energy');
             $table->integer('pv_max');
             $table->integer('level');
+            $table->integer('weight');
+            $table->integer('height');
+            $table->string('NameSpecialAttack');
+            $table->integer('ScoreSpecialAttack');
+            $table->string('NameNormalAttack');
+            $table->integer('ScoreNormalAttack');
+            $table->string('NameSpecialDefense');
+            $table->integer('ScoreSpecialDefense');
             $table->string('pathImg');
         });
     }

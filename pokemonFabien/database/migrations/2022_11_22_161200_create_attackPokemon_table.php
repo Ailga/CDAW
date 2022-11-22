@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEnergyTable extends Migration
+class CreateAttackPokemonTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateEnergyTable extends Migration
      */
     public function up()
     {
-        Schema::create('energy', function (Blueprint $table) {
+        Schema::create('attackPokemon', function (Blueprint $table) {
             $table->string('name')->unique();
-            $table->timestampTz('added_at');          //On créer une colonne avec une date et une timezone pour l'ajout de l'énergie'
-            $table->string('pathIcon');
+            $table->integer('score');
+            $table->string('type');                 //Pour le type d'attaque comme "attackNormal", "attackSpecial", "defenseSpecial"
+
         });
     }
 
@@ -27,6 +28,6 @@ class CreateEnergyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('energy');
+        Schema::dropIfExists('attackPokemon');
     }
 }

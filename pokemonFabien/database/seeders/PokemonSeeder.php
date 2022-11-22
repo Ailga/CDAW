@@ -28,8 +28,8 @@ class PokemonSeeder extends Seeder
                 {
                     $pokemon = $resultsPokemon[$index - 1];
                     $imgPokemon = $pathImg . $index . ".png";
-                    list($energyPokemon, $pv_max) = getInfoFromPokemon($url . strval($index));
-                    createTableFromAPI($pokemon->{'name'}, $energyPokemon, $pv_max, 0, $imgPokemon);
+                    list($energyPokemon, $pv_max, $weight, $height) = getInfoFromPokemon($url . strval($index));
+                    createTableFromAPI($pokemon->{'name'}, $energyPokemon, $pv_max, 0, $weight, $height, $imgPokemon);
                 }
             }else{
                 echo "Erreur : Impossible d'avoir la liste des pokemons";
@@ -44,25 +44,29 @@ class PokemonSeeder extends Seeder
                 $getInfosPokemonObj = json_decode($getInfosPokemon);
                 $energyPokemon = $getInfosPokemonObj->{'types'}[0]->{'type'}->{'name'};
                 $pv_max = $getInfosPokemonObj->{'stats'}[0]->{'base_stat'};
-                return array($energyPokemon, $pv_max);
+                $weight = $getInfosPokemonObj->{'weight'};
+                $height = $getInfosPokemonObj->{'height'};
+                return array($energyPokemon, $pv_max, $weight, $height);
             }else{
                 echo "Erreur : Impossible d'avoir des infos sur le pokemon";
             }
         }
 
         //On insert dans la table une nouvelle ligne
-        function createTableFromAPI($name, $energy, $pv_max, $level, $pathImg)
+        function createTableFromAPI($name, $energy, $pv_max, $level, $weight, $height, $pathImg)
         {
             DB::table('pokemon')->insert([
                 'name' => $name,
                 'energy' => $energy,
                 'pv_max' => $pv_max,
                 'level' => $level,
+                'weight' => $weight,
+                'height' => $height,
                 'pathImg' => $pathImg
                ]);
         }
         
         //On appel la fonction principale
-        getPokemonFromAPI("https://pokeapi.co/api/v2/pokemon/", 20);    // 20 pokemons max
+        getPokemonFromAPI("https://pokeapi.co/api/v2/pokemon?limit=100000", 50);    // 50 pokemons max
     }
 }
