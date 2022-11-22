@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/',function(){return view('listePokemon');});
+//Route::get('/',function(){return view('listePokemon');});
 
 
 Route::get('/{prenom}/{nom}', function ($prenom, $nom) {
@@ -22,4 +22,4 @@ Route::get('/{prenom}/{nom}', function ($prenom, $nom) {
 
 })->where('prenom','[A-Za-z]+')->where('nom','[A-Za-z]+');
 
-Route::get('/liste', 'listePokemonsController@appel_template');
+Route::get('/liste', 'listePokemonsController@affiche_bestiaire');
