@@ -28,7 +28,6 @@ function CallAPI($url)
             $index ++;
             $imgSource = "<img src='$pathImg$index.png' width='90' height='90'>";
             echo "<tr>";
-            //echo "<td width=40px align='center'>" . $index . "</td>";
             echo "<td width=10px align='center'>" . $infoPokemon->{'name'} ."</td>";
             echo "<td width=10px align='center'>" .$imgSource . "</td>";
 
@@ -54,7 +53,6 @@ function buildBestiaireFromDB($queryBestiaire)
     $imgSource = "<img src='$urlImg' width='90' height='90'>";
 
     echo "<tr>";
-    //echo "<td width=40px align='center'>" . $pokemon->{'id'} . "</td>";
     echo "<td width=10px align='center'>" . $pokemon->{'name'} ."</td>";
     echo "<td width=10px align='center'>" . $pokemon->{'energy'} ."</td>";
     echo "<td width=10px align='center'>" .$imgSource . "</td>";
