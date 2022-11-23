@@ -51,7 +51,11 @@ $(document).ready(function () {
             event.preventDefault();
         }else{
             alert("SUCCES - Saisie valide : Le commentaire de " + elementModifier + " va être modifié");
+            let tmp = $('#' + elementModifier);
+            console.log(tmp);
+            console.log(valToCheck);
             $('#' + elementModifier).val(valToCheck);
+            event.preventDefault();
         }
     }
 
@@ -63,5 +67,7 @@ $(document).ready(function () {
     let remover = document.getElementsByClassName("remove");
     Array.from(remover).forEach(m => m.addEventListener("click", deleter));
 
-    document.forms["myForm"].addEventListener("submit", checkNewCommentValide);
+    let myForm = document.forms["myForm"];
+    console.log(myForm);
+    myForm.addEventListener("submit", checkNewCommentValide);
 });
