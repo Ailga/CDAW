@@ -23,3 +23,4 @@ Route::get('/{prenom}/{nom}', function ($prenom, $nom) {
 })->where('prenom','[A-Za-z]+')->where('nom','[A-Za-z]+');
 
 Route::get('/liste', 'listePokemonsController@affiche_bestiaire');
+

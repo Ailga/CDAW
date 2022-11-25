@@ -2,13 +2,17 @@
 
 $(document).ready(function () {
     let indexNewComment = 4;        //Car on a deja la balise user3
+    var elementModifier = null;
+    var idElementModifier = null;
     function modify(e) {
-        var idElement = e.currentTarget.parentNode.id;
+        let idElement = e.currentTarget.parentNode.id;
         alert(e.type + " on modify for " + idElement + " !");
-        let elementModifier = document.getElementById(idElement);
+        idElementModifier = '#' + idElement;
+        elementModifier = $(idElementModifier).children("p");
         //element.children[1].innerHTML = "Chaîne modifiée!!";
         // On met à jour le textarea
-        $('#myText').val(elementModifier.children[1].innerHTML);
+        $('#myText').val(elementModifier[0].innerText);
+        $('#myForm').css('display', 'inline');
 
     }
 
@@ -44,18 +48,18 @@ $(document).ready(function () {
 
 
     function checkNewCommentValide(event){
-        alert("test check call et elementModifier = " + elementModifier);
-        var valToCheck = event.currentTarget.elements[0].value; //récupère la valeur du texte dans le premier input
+        let valToCheck = event.currentTarget.elements[0].value; //récupère la valeur du texte dans le premier input
         if(valToCheck == ""){
             alert("ERREUR - Saisie incorrecte : Le nouveau commentaire ne peut pas être nul");
             event.preventDefault();
+            return false;
         }else{
-            alert("SUCCES - Saisie valide : Le commentaire de " + elementModifier + " va être modifié");
-            let tmp = $('#' + elementModifier);
-            console.log(tmp);
-            console.log(valToCheck);
-            $('#' + elementModifier).val(valToCheck);
+            alert("SUCCES - Saisie valide : Le commentaire de " + idElementModifier + " va être modifié pour valToCheck = " + valToCheck);
+            $(idElementModifier).children("p")[0].innerText(valToCheck);
+            alert("test");
             event.preventDefault();
+            return false;
+
         }
     }
 
@@ -68,6 +72,6 @@ $(document).ready(function () {
     Array.from(remover).forEach(m => m.addEventListener("click", deleter));
 
     let myForm = document.forms["myForm"];
-    console.log(myForm);
     myForm.addEventListener("submit", checkNewCommentValide);
+    $('#myForm').css('display', 'none');
 });

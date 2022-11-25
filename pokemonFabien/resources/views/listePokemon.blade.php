@@ -46,7 +46,7 @@ function buildBestiaireFromDB($queryBestiaire)
 {
 
   echo "<table id='myTable' class='display'>";
-  echo "<thead><tr><th>ID</th><th>Name</th><th>Energie</th><th>Image</th></tr></thead>";
+  echo "<thead><tr><th>Name</th><th>Energie</th><th>Image</th></tr></thead>";
   echo "<tbody>";
   foreach($queryBestiaire as $pokemon)
   {
@@ -54,7 +54,6 @@ function buildBestiaireFromDB($queryBestiaire)
     $imgSource = "<img src='$urlImg' width='90' height='90'>";
 
     echo "<tr>";
-    echo "<td width=40px align='center'>" . $pokemon->{'id'} . "</td>";
     echo "<td width=10px align='center'>" . $pokemon->{'name'} ."</td>";
     echo "<td width=10px align='center'>" . $pokemon->{'energy'} ."</td>";
     echo "<td width=10px align='center'>" .$imgSource . "</td>";

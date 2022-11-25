@@ -20,12 +20,9 @@ class CreatePokemonTable extends Migration
             $table->integer('level');
             $table->integer('weight');
             $table->integer('height');
-            $table->string('NameSpecialAttack');
-            $table->integer('ScoreSpecialAttack');
-            $table->string('NameNormalAttack');
-            $table->integer('ScoreNormalAttack');
-            $table->string('NameSpecialDefense');
-            $table->integer('ScoreSpecialDefense');
+            $table->integer('scoreNormalAttack');
+            $table->integer('scoreSpecialAttack');
+            $table->integer('scoreSpecialDefense');
             $table->string('pathImg');
         });
     }

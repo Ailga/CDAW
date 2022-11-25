@@ -16,7 +16,7 @@ class CreatePlayerTable extends Migration
         Schema::create('player', function (Blueprint $table) {
             $table->string('name')->unique();           //nom du joueur ou pseudo
             $table->string('level');                    //niveau du joueur
-            $table->list('energies');                   //liste de nom d'energies
+            $table->json('energies');                   //liste de nom d'energies
             $table->integer('battle_won');              //nombre de combat gagnés
             $table->integer('battle_lost');             //nombre de combats perdus
         });
