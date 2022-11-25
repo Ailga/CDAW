@@ -10,7 +10,4 @@
 <content>
     @yield('content')
 </content>
-<footer>
-    Ceci est un pied de page
-</footer>
 </html>
