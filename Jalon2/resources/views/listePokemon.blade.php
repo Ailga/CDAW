@@ -20,7 +20,7 @@ function CallAPI($url)
         $responseObj = json_decode($response);
         $results = $responseObj->{'results'};
         echo "<table id='myTable' class='display'>";
-        echo "<thead><tr><th>ID</th><th>Name</th><th>Image</th></tr></thead>";
+        echo "<thead><tr><th>Name</th><th>Image</th></tr></thead>";
         echo "<tbody>";
         $index = 0;
         foreach($results as $infoPokemon)
@@ -28,7 +28,6 @@ function CallAPI($url)
             $index ++;
             $imgSource = "<img src='$pathImg$index.png' width='90' height='90'>";
             echo "<tr>";
-            echo "<td width=40px align='center'>" . $index . "</td>";
             echo "<td width=10px align='center'>" . $infoPokemon->{'name'} ."</td>";
             echo "<td width=10px align='center'>" .$imgSource . "</td>";
 
@@ -46,7 +45,7 @@ function buildBestiaireFromDB($queryBestiaire)
 {
 
   echo "<table id='myTable' class='display'>";
-  echo "<thead><tr><th>ID</th><th>Name</th><th>Energie</th><th>Image</th></tr></thead>";
+  echo "<thead><tr><th>Name</th><th>Energie</th><th>Image</th></tr></thead>";
   echo "<tbody>";
   foreach($queryBestiaire as $pokemon)
   {
@@ -54,7 +53,6 @@ function buildBestiaireFromDB($queryBestiaire)
     $imgSource = "<img src='$urlImg' width='90' height='90'>";
 
     echo "<tr>";
-    echo "<td width=40px align='center'>" . $pokemon->{'id'} . "</td>";
     echo "<td width=10px align='center'>" . $pokemon->{'name'} ."</td>";
     echo "<td width=10px align='center'>" . $pokemon->{'energy'} ."</td>";
     echo "<td width=10px align='center'>" .$imgSource . "</td>";
@@ -63,17 +61,15 @@ function buildBestiaireFromDB($queryBestiaire)
   echo "</tbody></table>";
 }
 
-
-/* Choix des fonctions à appeler */ 
-//CallAPI("https://pokeapi.co/api/v2/pokemon/")         // Par l'API (ID, nom et image)
-buildBestiaireFromDB($infosPokemon);                    // Par la BDD (ID, nom, energie et image)
+//CallAPI("https://pokeapi.co/api/v2/pokemon/")
+buildBestiaireFromDB($infosPokemon);
 
 ?>
 
 
 <script>
-    /* Dès que le document est prêt, on l'affiche en format DataTable Jquery */
-    $(document).ready( function () {
-        $('#myTable').DataTable();
-    } );
+  $(document).ready( function () {
+    $('#myTable').DataTable();
+} );
 </script>
+
