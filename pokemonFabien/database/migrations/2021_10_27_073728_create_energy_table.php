@@ -14,7 +14,8 @@ class CreateEnergyTable extends Migration
     public function up()
     {
         Schema::create('energy', function (Blueprint $table) {
-            $table->string('name')->unique();
+            $table->id();
+            $table->string('name');
             $table->timestampTz('added_at');          //On créer une colonne avec une date et une timezone pour l'ajout de l'énergie'
             $table->string('pathIcon');
         });
