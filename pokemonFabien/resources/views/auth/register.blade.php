@@ -1,11 +1,18 @@
 <head>	<!-- Main Style Css -->
-    <link rel="stylesheet" href="{{asset('css/register.css')}}">
+    <link rel="stylesheet" href="{{asset('css/registerLogin.css')}}">
+	<link rel="stylesheet" href="{{asset('css/homeStyles.css')}}">
 </head>
 
 
 
 
 <body class="form-v6">
+	<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+		<div class="container px-5">
+			<a class="navbar-brand fw-bold" href="/">Pokemon</a>
+		</div>
+	</nav>
+
 	<div class="page-content">
 		<div class="form-v6-content">
 			<div class="form-left">
@@ -31,14 +38,13 @@
 				<div class="form-row-last">
 					<input type="submit" name="register" class="register" value="{{ __('Register') }}">
 				</div>
-
                 
-                <x-jet-validation-errors class="mb-4" />
                 <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
-                    Déjà inscrit ?
-                </a>
-            </div>
+					<a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
+						Déjà inscrit ?
+					</a>
+            	</div>
+				<x-jet-validation-errors class="mb-4" />
             </x-guest-layout>
 			</form>
 		</div>
