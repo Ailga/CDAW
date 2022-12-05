@@ -9,7 +9,7 @@
 	<div class="page-content">
 		<div class="form-v6-content">
 			<div class="form-left">
-				<img src="img/imgInscriptionForm.jpg" alt="form">
+				<img src="img/imgInscriptionForm.jpg" alt="form" class="imgSignin">
 			</div>
             <x-guest-layout>
 			<form class="form-detail" action="{{ route('register') }}" method="POST">

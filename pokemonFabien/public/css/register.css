@@ -36,15 +36,25 @@ body {
 	display: flex;
 	display: -webkit-flex;
 }
-.form-v6-content .form-left {
-	margin-bottom: -6px;
-}
+
+
 .form-v6-content .form-left img {
 	border-top-left-radius: 8px;
 	border-bottom-left-radius: 8px;
+}
+
+
+.form-v6-content .form-left .imgSignin{
 	width: 520px;
 	height: 624px;
 }
+
+.form-v6-content .form-left .imgLogin{
+	width: 520px;
+	height: 624px;
+}
+
+
 .form-v6-content .form-detail {
     padding: 30px 40px;
 	position: relative;
@@ -67,6 +77,14 @@ body {
 .form-v6-content .form-detail .input-text {
 	margin-bottom: 35px;
 }
+
+.form-v6-content .form-detail .input-checkbox {
+	width: 3px;
+	outline: 1px solid;
+	border-radius: 4px;
+}
+
+
 .form-v6-content .form-detail input {
 	width: 92%;
     padding: 0px 15px 10px 15px;
