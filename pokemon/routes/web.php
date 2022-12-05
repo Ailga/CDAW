@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,15 +13,22 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-//Route::get('/',function(){return view('listePokemon');});
 
+Route::get('/', function () {
+    return view('welcomev2');
+});
 
-Route::get('/{prenom}/{nom}', function ($prenom, $nom) {
-    $listePokemon="Liste des Pokemons";
-    echo $prenom.$listePokemon;
-    //return "Hello World";
-    /*return view('welcome');*/
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-})->where('prenom','[A-Za-z]+')->where('nom','[A-Za-z]+');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
 Route::get('/liste', 'listePokemonsController@affiche_bestiaire');
+
+
+require __DIR__.'/auth.php';
