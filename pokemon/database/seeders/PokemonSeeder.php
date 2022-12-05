@@ -61,6 +61,20 @@ class PokemonSeeder extends Seeder
             return $listEnergy[$energyPokemon];
         }
 
+        function getIdEnergy($energyPokemon){
+            // SQL query
+	        $strSQL = "SELECT id, name FROM energy";
+	        // Execute the query (the recordset $rs contains the result)
+	        $rs = mysql_query($strSQL);
+	        // Loop the recordset $rs
+	        // Each row will be made into an array ($row) using mysql_fetch_array
+	        while($row = mysql_fetch_array($rs)) {
+	            // Write the value of the column FirstName (which is now in the array $row)
+	            $row['FirstName'] . "<br />";
+
+	        }
+        }
+
         //On récupère d'autres info comme le hp ou l'energie d'un pokemon
         function getInfoFromPokemon($urlPokemon)
         {
