@@ -61,7 +61,7 @@ class PokemonSeeder extends Seeder
             return $listEnergy[$energyPokemon];
         }
 
-        function getIdEnergy($energyPokemon){
+        /*function getIdEnergy($energyPokemon){
             // SQL query
 	        $strSQL = "SELECT id, name FROM energy";
 	        // Execute the query (the recordset $rs contains the result)
@@ -73,7 +73,7 @@ class PokemonSeeder extends Seeder
 	            $row['FirstName'] . "<br />";
 
 	        }
-        }
+        }*/
 
         //On récupère d'autres info comme le hp ou l'energie d'un pokemon
         function getInfoFromPokemon($urlPokemon)
@@ -100,7 +100,7 @@ class PokemonSeeder extends Seeder
         {
             DB::table('pokemon')->insert([
                 'name' => $name,
-                'id_energie' => $energy,
+                'id_energy' => $energy,
                 'pv_max' => $pv_max,
                 'level' => $level,
                 'weight' => $weight,

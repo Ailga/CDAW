@@ -30,9 +30,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/liste', 'listePokemonsController@affiche_bestiaire');
 
-Route::get('/player/{name}', function($name){
-    return view('player');
-});
+Route::get('/player/{name}','PlayerController@affiche_playerEnergy');
 
 
 require __DIR__.'/auth.php';

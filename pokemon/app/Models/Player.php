@@ -19,4 +19,8 @@ class Player extends Model
     public function energies() {
         return $this->hasMany(PlayerEnergy::class,'id_player');
     }
+    public function test(){ 
+        $test = 'ce que tu veux';
+        return $test;
+    }
 }

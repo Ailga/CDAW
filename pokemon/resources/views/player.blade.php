@@ -7,9 +7,10 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
 </head>
 
-<h1>Energies:</h1>
-<ul>
-@foreach($player->energies as $e)
+ <h3>Energies:</h3>
+  <ul>
+  {{$player->test}}
+    @foreach($player->energies as $e)
       <li>{{$e->energy->name}}</li>
-@endforeach
+    @endforeach
 </ul>
