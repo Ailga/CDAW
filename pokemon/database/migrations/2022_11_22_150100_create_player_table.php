@@ -14,15 +14,14 @@ class CreatePlayerTable extends Migration
     public function up()
     {
         Schema::create('player', function (Blueprint $table) {
-            $table->id();                     //ID du joueur (différent de celui de l'utilisateur)
+            $table->id('id_player');                     //ID du joueur (différent de celui de l'utilisateur)
             $table->unsignedBigInteger('id_user');  //ID du compte utilisateur (différent du joueur)
             $table->string('name');           //nom du joueur ou pseudo
             $table->string('level');                    //niveau du joueur
-            $table->json('energies');                   //liste de nom d'energies
             $table->integer('battle_won');              //nombre de combat gagnés
             $table->integer('battle_lost');             //nombre de combats perdus
 
-            $table->foreign('id')->references('id')->on('users');
+            $table->foreign('id_player')->references('id')->on('users');
         });
     }
 

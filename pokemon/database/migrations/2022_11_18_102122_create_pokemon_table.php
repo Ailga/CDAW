@@ -16,7 +16,7 @@ class CreatePokemonTable extends Migration
         Schema::create('pokemon', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('id_energie')-> nullable();
+            $table->unsignedBigInteger('id_energy')-> nullable();
             $table->integer('pv_max');
             $table->integer('level');
             $table->integer('weight');
@@ -26,7 +26,7 @@ class CreatePokemonTable extends Migration
             $table->integer('scoreSpecialDefense');
             $table->string('pathImg');
 
-            $table->foreign('id_energie')->references('id')->on('energy');
+            $table->foreign('id_energy')->references('id_energy')->on('energy');
         });
     }
 
