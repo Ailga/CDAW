@@ -27,6 +27,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'level',
+        'battle_won',
+        'battle_lost'
     ];
 
     /**
@@ -58,4 +61,21 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+
+    /**
+     * On créer une fonction qui renvoie les énergies d'un joueur
+     */
+    public function energies() {
+        return $this->hasMany(PlayerEnergy::class,'id_player');
+    }
+
+
+    /**
+     * Fonction de test
+     */
+    public function test(){ 
+        $test = 'ce que tu veux';
+        return $test;
+    }
 }
