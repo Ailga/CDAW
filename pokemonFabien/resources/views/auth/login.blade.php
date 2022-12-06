@@ -9,7 +9,7 @@
 <body class="form-v6">
     <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
 		<div class="container px-5">
-			<a class="navbar-brand fw-bold" href="/dashboard">Pokemon</a>
+			<a class="navbar-brand fw-bold" href="/">Pokemon</a>
 		</div>
 	</nav>
 
