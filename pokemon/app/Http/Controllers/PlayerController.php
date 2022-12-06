@@ -11,7 +11,8 @@ class PlayerController extends Controller
     function affiche_playerEnergy($name){
         $player = Player::where('name',$name)->first();
         echo $player->name;
-        echo $player->energies();
+        echo $player->test();
+        //print_r($player->energies());
         foreach($player->energies() as $e){
             echo $e;
             echo $e->energy()->name;
