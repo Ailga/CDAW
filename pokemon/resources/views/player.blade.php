@@ -9,8 +9,5 @@
 
  <h3>Energies:</h3>
   <ul>
-  {{$player->test}}
-    @foreach($player->energies as $e)
-      <li>{{$e->energy->name}}</li>
-    @endforeach
-</ul>
+    
+  </ul>
