@@ -18,10 +18,6 @@ Route::get('/', function () {
     return view('welcomev2');
 });
 
-Route::get('/home', function () {
-    return view('welcomev2');
-});
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -33,6 +29,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/liste', 'listePokemonsController@affiche_bestiaire');
+
+Route::get('/player/{name}','PlayerController@affiche_playerEnergy');
 
 
 require __DIR__.'/auth.php';
