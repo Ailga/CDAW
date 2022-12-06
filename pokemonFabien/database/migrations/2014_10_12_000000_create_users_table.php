@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('level');                    //niveau du joueur
-            $table->integer('battle_won');              //nombre de combat gagnés
-            $table->integer('battle_lost');             //nombre de combats perdus
+            $table->string('level')->default('0');                    //niveau du joueur
+            $table->integer('battle_won')->default('0');              //nombre de combat gagnés
+            $table->integer('battle_lost')->default('0');             //nombre de combats perdus
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

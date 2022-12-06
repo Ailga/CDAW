@@ -10,7 +10,7 @@
  <h3>Energies:</h3>
   <ul>
   {{$user->test}}
-    @foreach($user->energies as $u)
+    <!-- @foreach($user->energies as $u)
       <li>{{$u->energy->name}}</li>
-    @endforeach
+    @endforeach -->
 </ul>
