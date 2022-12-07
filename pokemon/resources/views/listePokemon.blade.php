@@ -19,7 +19,7 @@
 @foreach($infosPokemon as $pokemon)
 <tr>
   <td width=10px align='center'>{{$pokemon->name}}</td>
-  <td width=10px align='center'>{{$pokemon->id_energy}}</td>
+  <td width=10px align='center'>{{$pokemon->energy->name}}</td>
   <td width=10px align='center'>
     <img src={{$pokemon->pathImg}} width='90' height='90'>
   </td>
