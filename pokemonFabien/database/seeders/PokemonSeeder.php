@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Models\Energy;
 
 class PokemonSeeder extends Seeder
 {
@@ -37,6 +38,35 @@ class PokemonSeeder extends Seeder
             }
         }
 
+        function getIdEnergy($energyPokemon){
+            /*$listEnergy = array(
+                "normal" => "1",
+                "fighting" => "2",
+                "flying" => "3",
+                "poison" => "4",
+                "ground" => "5",
+                "rock" => "6",
+                "bug" => "7",
+                "ghost" => "8",
+                "steel" => "9",
+                "fire" => "10",
+                "water" => "11",
+                "grass" => "12",
+                "electric" => "13",
+                "psychic" => "14",
+                "ice" => "15",
+                "dragon" => "16",
+                "dark" => "17",
+                "fairy" => "18"
+            );*/
+            $energies=Energy::where('name',$energyPokemon)->get();
+            foreach ($energies as $column_energy) {
+                $id_energy=$column_energy->id;
+            }
+            return $id_energy;
+        }
+
+
         //On récupère d'autres info comme le hp ou l'energie d'un pokemon
         function getInfoFromPokemon($urlPokemon)
         {
@@ -50,7 +80,8 @@ class PokemonSeeder extends Seeder
                 $scoreDefenseSpeciale = $getInfosPokemonObj->{'stats'}[4]->{'base_stat'};
                 $weight = $getInfosPokemonObj->{'weight'};
                 $height = $getInfosPokemonObj->{'height'};
-                return array($energyPokemon, $pv_max, $weight, $height, $scoreAttaqueNormale, $scoreAttaqueSpeciale, $scoreDefenseSpeciale);
+                $id_energy=getIdEnergy($energyPokemon);
+                return array($id_energy, $pv_max, $weight, $height, $scoreAttaqueNormale, $scoreAttaqueSpeciale, $scoreDefenseSpeciale);
             }else{
                 echo "Erreur : Impossible d'avoir des infos sur le pokemon";
             }
@@ -61,7 +92,7 @@ class PokemonSeeder extends Seeder
         {
             DB::table('pokemon')->insert([
                 'name' => $name,
-                'energy' => $energy,
+                'id_energy' => $energy,
                 'pv_max' => $pv_max,
                 'level' => $level,
                 'weight' => $weight,
