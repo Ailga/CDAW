@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Player;
 
-class PlayerEnergy extends Model
+class UserEnergy extends Model
 {
     use HasFactory;
 
@@ -16,7 +15,7 @@ class PlayerEnergy extends Model
      * @var string
      */
 
-    protected $table = 'player_energy';
+    protected $table = 'user_energy';
     public function energy() {
         return $this->belongsTo(Energy::class, 'id_energy');
     }

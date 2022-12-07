@@ -21,10 +21,10 @@ class CreateBattleTable extends Migration
             $table->json('pokemonJoueur1');           //Contient la liste des noms des pokemons utilisés pour le joueur 1
             $table->json('pokemonJoueur2');           //Contient la liste des noms des pokemons utilisés pour le joueur 2
             $table->string('winner');                 //Contient le pseudo du gagnant
-            $table->unsignedBigInteger('id_player1')-> nullable();
-            $table->unsignedBigInteger('id_player2')-> nullable();
-            $table->foreign('id_player1')->references('id_player')->on('player');
-            $table->foreign('id_player2')->references('id_player')->on('player');
+            $table->unsignedBigInteger('id_user1')-> nullable();
+            $table->unsignedBigInteger('id_user2')-> nullable();
+            $table->foreign('id_user1')->references('id')->on('users');
+            $table->foreign('id_user2')->references('id')->on('users');
         });
     }
 

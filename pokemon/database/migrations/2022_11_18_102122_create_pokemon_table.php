@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+
 class CreatePokemonTable extends Migration
 {
     /**
@@ -26,7 +27,11 @@ class CreatePokemonTable extends Migration
             $table->integer('scoreSpecialDefense');
             $table->string('pathImg');
 
-            $table->foreign('id_energy')->references('id_energy')->on('energy');
+            $table->foreign('id_energy')
+            ->references('id')
+            ->on('energy')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
         });
     }
 
