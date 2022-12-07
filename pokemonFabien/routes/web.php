@@ -30,6 +30,8 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/liste', 'listePokemonsController@affiche_bestiaire');
 
+Route::get('/battle/{namePokemonPlayer}/{namePokemonOpponent}', 'battlePokemonsController@do_battle');
+
 Route::get('/user/{name}','UserController@affiche_userEnergy');
 
 
