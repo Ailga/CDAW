@@ -14,10 +14,12 @@ class CreateUserEnergyTable extends Migration
     public function up()
     {
         Schema::create('user_energy', function (Blueprint $table) {
-            $table->unsignedBigInteger('id_energy')-> nullable();
-            $table->unsignedBigInteger('id_user')-> nullable();
+            $table->unsignedBigInteger('id_energy');
+            $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id')->on('users');
             $table->foreign('id_energy')->references('id')->on('energy');
+
+            $table->primary(['id_user', 'id_energy']);
         });
     }
 
@@ -28,6 +30,6 @@ class CreateUserEnergyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('player_energy');
+        Schema::dropIfExists('user_energy');
     }
 }
