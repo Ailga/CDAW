@@ -67,7 +67,7 @@ class User extends Authenticatable
      * On créer une fonction qui renvoie les énergies d'un joueur
      */
     public function energies() {
-        return $this->hasMany(PlayerEnergy::class,'id_player');
+        return $this->hasMany(UserEnergy::class,'id_user');
     }
 
 
