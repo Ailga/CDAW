@@ -2,6 +2,7 @@
   <title>Battle Pokemon</title>
   <script type = "text/javascript" src = "{{asset('js/battle/main.js')}}"></script>
   <link rel = "stylesheet" type = "text/css" href = "{{asset('css/battle/main.css')}}" />
+  <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
 </head>
 <h1>Info débug temp </h1>
 <h2>Pokemon Joueur</h2>
@@ -80,15 +81,15 @@ setObjPokemonOpponent(objPokemonOpponent);
   
   <div class="box">
     <div id = "message" class="message">
-      Que doit faire {{$pokemonOpponent->name}}?
+      Que doit faire {{$pokemonPlayer->name}}?
     </div>
     <div class="actions">
-      <button onclick = "waterCannon()">Attaque normale</button>
-      <button onclick = "waterPulse()">Attaque spéciale</button>
-      <button onclick = "surf()">Défense spéciale</button>
+      <button onclick = "chooseActionPlayerTour('Opponent', 'attaqueNormale')">Attaque normale</button>
+      <button onclick = "chooseActionPlayerTour('Opponent', 'attaqueSpeciale')">Attaque spéciale</button>
+      <button onclick = "chooseActionPlayerTour('Opponent', 'defenseSpecial')">Défense spéciale</button>
     </div>
     <div class = "continue">
-      <button onclick = "compPokemon()">Continue</button>
+      <button onclick = "enDev()">Continue</button>
     </div>
   </div>
 </div>
