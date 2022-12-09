@@ -46,8 +46,4 @@ class Pokemon extends Model
     /**
      * Fonction de test
      */
-    public function test(){ 
-        $test = 'ce que tu veux';
-        return $test;
-    }
 }
