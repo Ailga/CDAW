@@ -13,16 +13,17 @@
 <h1>Pokédex</h1>
 
 <div class="container">
+
 <table id='myTable' class='display'>
-<thead><tr><th>Name</th><th>Energie</th><th>Image</th></tr></thead>
+<thead><tr><th>Name</th><th id = 'EnergiePokemon'>Energies</th><th>Image</th></tr></thead>
 <tbody>
 @foreach($infosPokemon as $pokemon)
 <tr>
-  <td width=10px align='center'>{{$pokemon->name}}</td>
-  <td width=10px align='center'>{{$pokemon->energy->name}}</td>
-  <td width=10px align='center'>
-    <img src={{$pokemon->pathImg}} width='90' height='90'>
-  </td>
+  <td width=20px align='center'>{{$pokemon->name}}</td>
+  <td id = 'EnergiePokemon' width=10px align='center'>{{$pokemon->energy->name}}</td>
+  <td width=20px align='justify'>
+    <img src={{$pokemon->pathImg}} width='90' height='90'><img src={{$pokemon->energy->pathIcon}}>
+  </td> 
 </tr>
 
 @endforeach

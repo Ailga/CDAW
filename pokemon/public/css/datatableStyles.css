@@ -6,61 +6,89 @@ head{
 
 }
 
+h1{
+	position: absolute;
+	top: 10px;
+	text-align:center;
+}
+
 body {
-    height: 150%;
-	margin: 0;
-	background: linear-gradient(45deg, #2937f0, #9f1ae2);
-	font-family: sans-serif;
-    text-align: center;
-	font-weight: 100;
+    width: 100%;
+	margin:  0 auto;
+	background-image: -moz-linear-gradient( 136deg, rgb(0,0,70) 0%, rgb(28,181,224) 100%);
+    background-image: -webkit-linear-gradient( 136deg, rgb(0,0,70) 0%, rgb(28,181,224) 100%);
+    background-image: -ms-linear-gradient( 136deg, rgb(0,0,70) 0%, rgb(28,181,224) 100%);
+	justify-content: center;
+	-o-justify-content: center;
+	-ms-justify-content: center;
+	-moz-justify-content: center;
+	-webkit-justify-content: center;
+	align-items: center;
+	-o-align-items: center;
+	-ms-align-items: center;
+	-moz-align-items: center;
+	-webkit-align-items: center;
+	display: flex;
 }
 
 .container {
+	background: #fff;
+	width: 600px;
+	border-radius: 0px;
+	-o-border-radius: 0px;
+	-ms-border-radius: 0px;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	margin: 180px 0;
+	font-family: 'Nunito', sans-serif;
+	color: black;
+	font-weight: 700;
 	position: relative;
-	top: 600px;
-	left: 50%;
-    right:50%;
-	transform: translate(-50%, -50%);
+	display: flex;
+	
 }
 
-table {
-	width: 800px;
-	border-collapse: collapse;
-	overflow: hidden;
-	box-shadow: 0 0 20px rgba(0,0,0,0.1);
+#myTable_filter{
+	margin: 5px ;
+}
+
+#myTable_length{
+	margin: 5px;
+}
+
+#myTable_wrapper{
+	margin: 5px 0;
+}
+
+#myTable{
+	position: relative;
 }
 
 th,
+thead{ 
+	background-color: rgba(28, 97, 224, 0.479);
+}
+
 td {
 	padding: 15px;
-	background-color: rgba(255, 255, 255, 0.726);
+	background-color: rgba(0, 0, 70, 0.116);
 	color: rgb(0, 0, 0);
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     text-transform : capitalize;
 }
 
-th {
-	text-align: center;
+
+#EnergiePokemon {
+	display:none;
 }
 
-#thead #tr th {
-		background-color: #55608f;
-        text-align: center;
-	}
-
-#tbody #tr:hover {
-			background-color: rgba(253, 253, 253, 0.363);
-		}
-#tbody td {
-		position: relative;
+#myTable_info{
+	font-size: small;
+	margin: 5px;
 }
-#tbody:hover:before {
-				content: "";
-				position: absolute;
-				left: 0;
-				right: 0;
-				top: -9999px;
-				bottom: -9999px;
-				background-color: rgba(255,255,255,0.2);
-				z-index: -1;
-			}
+
+
+
+
+
+
