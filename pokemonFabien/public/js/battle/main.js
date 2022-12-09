@@ -5,12 +5,14 @@ var opponentPokemon = {};
 function setObjPokemonPlayer(jsonPokemon){
   playerPokemon = jsonPokemon;
   playerPokemon.hp = playerPokemon.pv_max;
+  playerPokemon.availableNormalAttack, playerPokemon.availableSpecialAttack, playerPokemon.availableSpecialDefense = true;
   console.log("obj pokemon player set ! pokemon : " + playerPokemon.name);
 }
 
 function setObjPokemonOpponent(jsonPokemon){
   opponentPokemon = jsonPokemon;
   opponentPokemon.hp = opponentPokemon.pv_max;
+  playerPokemon.availableNormalAttack, playerPokemon.availableSpecialAttack, playerPokemon.availableSpecialDefense = true;
   console.log("obj pokemon opponent set ! pokemon : " + opponentPokemon.name);
 }
 
@@ -23,43 +25,65 @@ function notifyMessage(whichPlayer, message){
 
 
 
-function doAttack(whichPlayer, pokemon, typeAttack){
-
+function doAttack(whichPlayer, pokemonPlayer, pokemonOpponent, typeAttack){
+  let newPokemonOpponenthp = 0;
+  let stillAlive = true;
   if(typeAttack == "attaqueNormale"){
-    notifyMessage(whichPlayer, "Pokemon fait sont attaque normale ! Dégats : " + pokemon.scoreNormalAttack);
-    newPokemonhp = pokemon.hp - pokemon.scoreNormalAttack;
-    setPvPokemon(whichPlayer, pokemon, newPokemonhp)
-    if(newPokemonhp <=0){
-      alert("Pokemon " + pokemon.name + " mort");
-      notifyMessage(whichPlayer, "Pokemon " + pokemon.name + " mort");
+    if(pokemonPlayer.availableNormalAttack){
+      // Attaque normale possible
+      notifyMessage(whichPlayer, "Pokemon fait sont attaque normale ! Dégats : " + pokemon.scoreNormalAttack);
+      newPokemonOpponenthp = pokemonOpponent.hp - pokemon.scoreNormalAttack;
+      stillAlive = isAliveAfterSetPvPokemon(whichPlayer, pokemonOpponent, newPokemonOpponenthp);
     }else{
-      notifyMessage(whichPlayer, "Pokemon " + pokemon.name + " attaqué !");
-    }
+      // TODO Pas d'attaque normale possible
+    }    
 
   }else if(typeAttack == "attaqueSpeciale"){
-    notifyMessage(whichPlayer, "Pokemon fait sont attaque spéciale ! Dégats : " + pokemon.scoreSpecialAttack);
-    newPokemonhp = pokemon.hp - pokemon.scoreSpecialAttack;
-    setPvPokemon(whichPlayer, pokemon, newPokemonhp)
-    if(newPokemonhp <=0){
-      alert("Pokemon " + pokemon.name + " mort");
-      notifyMessage(whichPlayer, "Pokemon " + pokemon.name + " mort");
+    if(pokemonPlayer.availableSpecialAttack){
+      // Attaque spéciale possible
+      notifyMessage(whichPlayer, "Pokemon fait sont attaque spéciale ! Dégats : " + pokemon.scoreSpecialAttack);
+      newPokemonOpponenthp = pokemonOpponent.hp - pokemon.scoreSpecialAttack;
+      stillAlive = isAliveAfterSetPvPokemon(whichPlayer, pokemonOpponent, newPokemonOpponenthp);
     }else{
-      notifyMessage(whichPlayer, "Pokemon " + pokemon.name + " attaqué !");
-    }
+      // TODO Pas d'attaque normale possible
+    } 
+    
   }
 }
 
 
+function doDefense(whichPlayer, pokemon, degatAttaque){
+  if(pokemon.availableSpecialDefense){
+    // Défense possible
+    let degatDefense = pokemon.scoreSpecialDefense - degatAttaque;
+    let newPokemonPlayerhp = pokemon.hp - degatDefense;
+    let stillAlive = true;
+    notifyMessage(whichPlayer, "Pokemon fait sa défense spéciale ! Dégats reçu : " + degatDefense);
+    stillAlive = isAliveAfterSetPvPokemon(whichPlayer, pokemon, newPokemonPlayerhp);
+    pokemon.availableSpecialDefense = false
+  }else{
+  // TODO Pas de défense possible
+  }
+  
+  
+}
 
 
 
-
-function setPvPokemon(whichPlayer, pokemon, newHp){
+function isAliveAfterSetPvPokemon(whichPlayer, pokemon, newHp){
   pokemon.hp = newHp;
   if(whichPlayer == "Player"){
     $(".player").children[0].children[0].children.myHP.innerText = pokemon.hp;
   }else{
     $(".opponent").children[0].children[0].children.apHP.innerText = pokemon.hp;
+  }
+  if(pokemon.hp <=0){
+    alert("Pokemon " + pokemon.name + " mort");
+    notifyMessage(whichPlayer, "Pokemon " + pokemon.name + " mort");
+    return false;
+  }else{
+    notifyMessage(whichPlayer, "Pokemon " + pokemon.name + " attaqué !");
+    return true;
   }
 }
 

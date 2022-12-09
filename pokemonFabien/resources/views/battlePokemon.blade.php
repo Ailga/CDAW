@@ -3,7 +3,7 @@
   <script type = "text/javascript" src = "{{asset('js/battle/main.js')}}"></script>
   <link rel = "stylesheet" type = "text/css" href = "{{asset('css/battle/main.css')}}" />
 </head>
-
+<h1>Info débug temp </h1>
 <h2>Pokemon Joueur</h2>
 <ul>
   <li>Name : {{$pokemonPlayer->name}}</li>
