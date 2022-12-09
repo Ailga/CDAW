@@ -1,5 +1,101 @@
+var playerPokemon = {}
+var opponentPokemon = {};
+
+
+function setObjPokemonPlayer(jsonPokemon){
+  playerPokemon = jsonPokemon;
+  playerPokemon.hp = playerPokemon.pv_max;
+  playerPokemon.availableNormalAttack, playerPokemon.availableSpecialAttack, playerPokemon.availableSpecialDefense = true;
+  console.log("obj pokemon player set ! pokemon : " + playerPokemon.name);
+}
+
+function setObjPokemonOpponent(jsonPokemon){
+  opponentPokemon = jsonPokemon;
+  opponentPokemon.hp = opponentPokemon.pv_max;
+  playerPokemon.availableNormalAttack, playerPokemon.availableSpecialAttack, playerPokemon.availableSpecialDefense = true;
+  console.log("obj pokemon opponent set ! pokemon : " + opponentPokemon.name);
+}
+
 var userHP = 100;
 var opHP = 100;
+
+function notifyMessage(whichPlayer, message){
+  $("#info" + whichPlayer).children.notification.innerText = message;
+}
+
+
+
+function doAttack(whichPlayer, pokemonPlayer, pokemonOpponent, typeAttack){
+  let newPokemonOpponenthp = 0;
+  let stillAlive = true;
+  if(typeAttack == "attaqueNormale"){
+    if(pokemonPlayer.availableNormalAttack){
+      // Attaque normale possible
+      notifyMessage(whichPlayer, "Pokemon fait sont attaque normale ! Dégats : " + pokemon.scoreNormalAttack);
+      newPokemonOpponenthp = pokemonOpponent.hp - pokemon.scoreNormalAttack;
+      stillAlive = isAliveAfterSetPvPokemon(whichPlayer, pokemonOpponent, newPokemonOpponenthp);
+    }else{
+      // TODO Pas d'attaque normale possible
+    }    
+
+  }else if(typeAttack == "attaqueSpeciale"){
+    if(pokemonPlayer.availableSpecialAttack){
+      // Attaque spéciale possible
+      notifyMessage(whichPlayer, "Pokemon fait sont attaque spéciale ! Dégats : " + pokemon.scoreSpecialAttack);
+      newPokemonOpponenthp = pokemonOpponent.hp - pokemon.scoreSpecialAttack;
+      stillAlive = isAliveAfterSetPvPokemon(whichPlayer, pokemonOpponent, newPokemonOpponenthp);
+    }else{
+      // TODO Pas d'attaque normale possible
+    } 
+    
+  }
+}
+
+
+function doDefense(whichPlayer, pokemon, degatAttaque){
+  if(pokemon.availableSpecialDefense){
+    // Défense possible
+    let degatDefense = pokemon.scoreSpecialDefense - degatAttaque;
+    let newPokemonPlayerhp = pokemon.hp - degatDefense;
+    let stillAlive = true;
+    notifyMessage(whichPlayer, "Pokemon fait sa défense spéciale ! Dégats reçu : " + degatDefense);
+    stillAlive = isAliveAfterSetPvPokemon(whichPlayer, pokemon, newPokemonPlayerhp);
+    pokemon.availableSpecialDefense = false
+  }else{
+  // TODO Pas de défense possible
+  }
+  
+  
+}
+
+
+
+function isAliveAfterSetPvPokemon(whichPlayer, pokemon, newHp){
+  pokemon.hp = newHp;
+  if(whichPlayer == "Player"){
+    $(".player").children[0].children[0].children.myHP.innerText = pokemon.hp;
+  }else{
+    $(".opponent").children[0].children[0].children.apHP.innerText = pokemon.hp;
+  }
+  if(pokemon.hp <=0){
+    alert("Pokemon " + pokemon.name + " mort");
+    notifyMessage(whichPlayer, "Pokemon " + pokemon.name + " mort");
+    return false;
+  }else{
+    notifyMessage(whichPlayer, "Pokemon " + pokemon.name + " attaqué !");
+    return true;
+  }
+}
+
+
+
+
+
+
+
+
+
+
 opAttacks = [flameThrower, dragonClaw, ember, growl];
 playerMove = 0;
 /* users moves */
@@ -88,36 +184,6 @@ function surf() {
   playerMove = 1;
 }
 }
-function tackle() {
-  if(playerMove == 0 && userHP != 0) {
-  //alert("Water Cannon!");
-  var miss = Math.floor((Math.random() * 10) + 1);
-  if(miss == 1 ) {
-    document.getElementById('message').innerHTML = " Blastoise's attack missed! "
-  }
-  else {
-    document.getElementById('message').innerHTML = " Blastoise used tackle ";
-    var critical = Math.floor((Math.random() * 10) + 1);
-      if(critical == 4){
-        for(var x = 0; x < 2; x++){
-          opHP = opHP - 5;
-        }
-      }
-      else{
-        opHP = opHP - 5;
-      }
-    if(opHP < 0){ opHP = 0}
-    document.getElementById('apHP').innerHTML = opHP;
-  //document.getElementById('message').innerHTML = " Charizard4 "
-    if(opHP == 0){
-      document.getElementById('message').innerHTML = " Charizard fainted! "
-    }
-  }
-  //wait();
-  playerMove = 1;
-}
-}
-
 
 
 /* opponent's moves */
