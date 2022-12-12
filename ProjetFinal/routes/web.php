@@ -26,12 +26,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/battle/{namePokemonPlayer}/{namePokemonOpponent}', 'battlePokemonsController@do_battle');
 });
 
 Route::get('/liste', 'listePokemonsController@affiche_bestiaire');
 
+Route::get('/battle/{namePokemonPlayer}/{namePokemonOpponent}', 'battlePokemonsController@do_battle');
+
 Route::get('/user/{name}','UserController@affiche_userEnergy');
 
+Route::get('/joueurs', function () {
+    return view('autresJoueurs');
+});
 
 require __DIR__.'/auth.php';
