@@ -6,13 +6,18 @@ playerPokemon.availableNormalAttack, playerPokemon.availableSpecialAttack, playe
 function setObjPokemonPlayer(jsonPokemon){
   playerPokemon = jsonPokemon;
   playerPokemon.hp = playerPokemon.pv_max;
+  playerPokemon.availableNormalAttack = true;
+  playerPokemon.availableSpecialAttack = true;
+  playerPokemon.availableSpecialDefense = true;
   console.log("obj pokemon player set ! pokemon : " + playerPokemon.name);
 }
 
 function setObjPokemonOpponent(jsonPokemon){
   opponentPokemon = jsonPokemon;
   opponentPokemon.hp = opponentPokemon.pv_max;
-  
+  opponentPokemon.availableNormalAttack = true;
+  opponentPokemon.availableSpecialAttack = true; 
+  opponentPokemon.availableSpecialDefense = true;
   console.log("obj pokemon opponent set ! pokemon : " + opponentPokemon.name);
 }
 
@@ -25,15 +30,15 @@ function notifyMessage(whichPlayer, message){
 function chooseActionPlayerTour(whichPlayer, typeAttack){
   console.log("fonction chooseActionPlayerTour appelée avec param : " + typeAttack);
   playerPokemon.actionTour = typeAttack;
-  if(typeAttack == "attaqueNormale" && ! playerPokemon.availableNormalAttack){
+  if(typeAttack == "attaqueNormale" && playerPokemon.availableNormalAttack){
     playerPokemon.availableNormalAttack = true;
     playerPokemon.availableSpecialDefense = false;
     doAttack(whichPlayer, typeAttack);
-  }else if(typeAttack == "attaqueSpeciale" && ! playerPokemon.availableSpecialAttack){
+  }else if(typeAttack == "attaqueSpeciale" && playerPokemon.availableSpecialAttack){
     playerPokemon.availableSpecialAttack = true;
     playerPokemon.availableSpecialDefense = false;
     doAttack(whichPlayer, typeAttack);
-  }else if(typeAttack == "defenseSpecial" && ! playerPokemon.availableSpecialDefense){
+  }else if(typeAttack == "defenseSpecial" && playerPokemon.availableSpecialDefense){
     playerPokemon.availableSpecialDefense = true;
   }
 }
@@ -77,7 +82,6 @@ function doDefense(whichPlayer, pokemon, degatAttaque){
     pokemon.hp = newPokemonHp;
   }else{
   // Pas de défense possible
-  alert("Pokemon "+ pokemon.name + " ne peut plus se défendre");
   notifyMessage(whichPlayer, "Pokemon "+ pokemon.name + " ne peut pas se défendre, hp = " + pokemon.hp + " et dégat attaque = " + degatAttaque);
   pokemon.hp = pokemon.hp - degatAttaque;
   }

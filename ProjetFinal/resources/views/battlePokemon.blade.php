@@ -3,8 +3,48 @@
   <script type = "text/javascript" src = "{{asset('js/battle/main.js')}}"></script>
   <link rel = "stylesheet" type = "text/css" href = "{{asset('css/battle/main.css')}}" />
   <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js" integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI" crossorigin="anonymous"></script>
+
 </head>
+<script>
+  $(function() {
+    let ip_address = "127.0.0.1";
+    let socket_port = '3000';
+    let socket = io(ip_address + ':' + socket_port);
+
+    let msgInput = $('#messagePlayerServer');
+
+    msgInput.keypress(function (e) { 
+      let message = $(this).html();
+      console.log(message);
+      if(e.which == 13 && ! e.shiftKey) {
+        socket.emit('sendDataToServer', message);
+        msgInput.text('');
+        return false;
+      }
+    });
+
+    socket.on('sendDataToClient', (message) => {
+      $('#messageBroadcast').text('');
+      $('#messageBroadcast').text(`${message}`);
+    });
+   
+  });
+
+
+</script>
 <h1>Info débug temp </h1>
+
+<h5>Message server input : </h5>
+<div id="messagePlayerServer" contenteditable ="">
+  Aucun
+</div>
+<h5>Message server broadcast : </h5>
+<div id="messageBroadcast">
+  Aucun
+</div>
+
+
 <h2>Pokemon Joueur</h2>
 <ul>
   <li>Name : {{$pokemonPlayer->name}}</li>
@@ -23,12 +63,18 @@
 
 <script>
 // On envoie les objets pokemon sous format JSON au fichier js
-var objPokemonPlayer = <?php echo $pokemonPlayer->toJson();?>
+let objPokemonPlayer = <?php echo $pokemonPlayer->toJson();?>
 
-var objPokemonOpponent = <?php echo $pokemonOpponent->toJson();?>
+let objPokemonOpponent = <?php echo $pokemonOpponent->toJson();?>
+
+let playerOnline = false;
 
 setObjPokemonPlayer(objPokemonPlayer);
 setObjPokemonOpponent(objPokemonOpponent);
+
+if("{{$infoPlayerConnected}}" !== null){
+  playerOnline = true;
+}
 
 </script>
 
@@ -98,14 +144,24 @@ setObjPokemonOpponent(objPokemonOpponent);
   <div class="boxNotificationCombat">
     <div id="infoPlayer">
       <h2>Player</h2>
-      <div id="statut">
-        Status : Offline
+      <div id="statutPlayer">
+        <script>
+        if(playerOnline){
+          const statusPlayer = document.getElementById("statutPlayer");
+          statusPlayer.innerHTML = "Status : Online ✅";
+          statusPlayer.style.color = "green";
+        }else{
+          const statusPlayer = document.getElementById("statutPlayer"); 
+          statusPlayer.innerHTML = "Status : Offline ❌";
+          statusPlayer.style.color = "red";
+        }
+        </script>
       </div>
       <div id="name">
-        Name :  XXXXX
+        Name :  {{$infoPlayerConnected->name}}
       </div>
       <div id="level">
-        Level : XXXXX
+        Level : {{$infoPlayerConnected->level}}
       </div>
       <h4>Notification player : </h4>
       <div id="notification">
@@ -115,7 +171,7 @@ setObjPokemonOpponent(objPokemonOpponent);
 
     <div id="infoOpponent">
       <h2>Opponent</h2>
-      <div id="statut">
+      <div id="statutOpponent">
         Status : Offline
       </div>
       <div id="name">

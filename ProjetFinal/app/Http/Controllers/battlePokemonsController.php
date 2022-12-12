@@ -12,8 +12,9 @@ class battlePokemonsController extends Controller
         /**
          * TODO 
          */
+        $infoPlayerConnected = auth()->user();
         $pokemonPlayer = Pokemon::where('name',$namePokemonPlayer)->first();
         $pokemonOpponent = Pokemon::where('name', $namePokemonOpponent)->first();
-        return view('battlePokemon', ['pokemonPlayer' => $pokemonPlayer, 'pokemonOpponent' => $pokemonOpponent]);
+        return view('battlePokemon', ['pokemonPlayer' => $pokemonPlayer, 'pokemonOpponent' => $pokemonOpponent, 'infoPlayerConnected' => $infoPlayerConnected]);
     }
 }
