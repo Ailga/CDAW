@@ -1,38 +1,11 @@
 <head>
   <title>Battle Pokemon</title>
-  <script type = "text/javascript" src = "{{asset('js/battle/main.js')}}"></script>
   <link rel = "stylesheet" type = "text/css" href = "{{asset('css/battle/main.css')}}" />
   <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js" integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI" crossorigin="anonymous"></script>
-
+  <script type = "text/javascript" src = "{{asset('js/battle/main.js')}}"></script>
 </head>
-<script>
-  $(function() {
-    let ip_address = "127.0.0.1";
-    let socket_port = '3000';
-    let socket = io(ip_address + ':' + socket_port);
 
-    let msgInput = $('#messagePlayerServer');
-
-    msgInput.keypress(function (e) { 
-      let message = $(this).html();
-      console.log(message);
-      if(e.which == 13 && ! e.shiftKey) {
-        socket.emit('sendDataToServer', message);
-        msgInput.text('');
-        return false;
-      }
-    });
-
-    socket.on('sendDataToClient', (message) => {
-      $('#messageBroadcast').text('');
-      $('#messageBroadcast').text(`${message}`);
-    });
-   
-  });
-
-
-</script>
 <h1>Info débug temp </h1>
 
 <h5>Message server input : </h5>
@@ -130,12 +103,12 @@ if("{{$infoPlayerConnected}}" !== null){
       Que doit faire {{$pokemonPlayer->name}}?
     </div>
     <div class="actions">
-      <button onclick = "chooseActionPlayerTour('Opponent', 'attaqueNormale')">Attaque normale</button>
-      <button onclick = "chooseActionPlayerTour('Opponent', 'attaqueSpeciale')">Attaque spéciale</button>
-      <button onclick = "chooseActionPlayerTour('Opponent', 'defenseSpecial')">Défense spéciale</button>
+      <button id="attaqueNormale" onclick = "chooseActionPlayerTour('Opponent', 'attaqueNormale')">Attaque normale</button>
+      <button id="attaqueSpeciale" onclick = "chooseActionPlayerTour('Opponent', 'attaqueSpeciale')">Attaque spéciale</button>
+      <button id="defenseSpeciale" onclick = "chooseActionPlayerTour('Opponent', 'defenseSpeciale')">Défense spéciale</button>
     </div>
     <div class = "continue">
-      <button onclick = "enDev()">Continue</button>
+      <button id="btnContinue" onclick = "actionContinue()">Continuer</button>
     </div>
   </div>
 </div>
@@ -157,6 +130,9 @@ if("{{$infoPlayerConnected}}" !== null){
         }
         </script>
       </div>
+      <div id="statutCombat" style="color: red">
+        État : Pas prêt
+      </div>
       <div id="name">
         Name :  {{$infoPlayerConnected->name}}
       </div>
@@ -173,6 +149,9 @@ if("{{$infoPlayerConnected}}" !== null){
       <h2>Opponent</h2>
       <div id="statutOpponent">
         Status : Offline
+      </div>
+      <div id="statutCombat" style="color: red">
+        État : Pas prêt
       </div>
       <div id="name">
         Name :  XXXXX

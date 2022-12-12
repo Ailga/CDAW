@@ -89,6 +89,7 @@ body {
     float: left;
     width: 25%;
     height: 100%;
+    visibility: hidden;
   }
   .box .continue  button {
     position: relative;
@@ -103,6 +104,7 @@ body {
     margin: 4px;
     padding: 16px;
     outline: none !important;
+    
   }
   .box .continue button:hover {
     background: #777;
@@ -112,6 +114,21 @@ body {
   .box .continue button:active {
     background: #555;
     border-color: #666;
+  }
+
+  .btnDisabled{
+    pointer-events: none;
+    opacity: 20%;
+  }
+
+  .btnEnabled{
+    cursor: pointer;
+    visibility:visible;
+  }
+
+  .btnClicked{
+    pointer-events: none;
+    opacity: 70%;
   }
   
   .box .actions {

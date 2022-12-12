@@ -14,10 +14,10 @@ const io = require('socket.io')(server, {
 io.on('connection', (socket) => {
     console.log('connection');
 
-    socket.on('sendDataToServer', (message) => {
+    socket.on('sendDataToOpponent', (message) => {
         console.log(message);
 
-        io.sockets.emit('sendDataToClient', message);
+        socket.broadcast.emit('sendDataToPlayer', message);
     });
 
 
