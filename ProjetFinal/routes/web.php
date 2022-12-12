@@ -34,12 +34,8 @@ Route::get('/battle/{namePokemonPlayer}/{namePokemonOpponent}', 'battlePokemonsC
 
 Route::get('/user/{name}','UserController@affiche_userEnergy');
 
-<<<<<<< Updated upstream
 Route::get('/joueurs', function () {
     return view('autresJoueurs');
 });
-=======
 
-
->>>>>>> Stashed changes
 require __DIR__.'/auth.php';
