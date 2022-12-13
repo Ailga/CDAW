@@ -12,7 +12,7 @@ const io = require('socket.io')(server, {
 
 
 io.on('connection', (socket) => {
-    console.log('connection');
+    console.log('connection et socket ID = ' + socket.id);
 
     socket.on('sendDataToOpponent', (message) => {
         console.log(message);

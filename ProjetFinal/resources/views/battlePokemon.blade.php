@@ -8,16 +8,8 @@
 
 <h1>Info débug temp </h1>
 
-<h5>Message server input : </h5>
-<div id="messagePlayerServer" contenteditable ="">
-  Aucun
-</div>
-<h5>Message server broadcast : </h5>
-<div id="messageBroadcast">
-  Aucun
-</div>
 
-
+<!--
 <h2>Pokemon Joueur</h2>
 <ul>
   <li>Name : {{$pokemonPlayer->name}}</li>
@@ -33,7 +25,7 @@
   <li>Icon energy : <img src="{{$pokemonOpponent->energy->pathIcon}}"/></li>
   <li>Hp : {{$pokemonOpponent->pv_max}}</li>
 </ul>
-
+-->
 <script>
 // On envoie les objets pokemon sous format JSON au fichier js
 let objPokemonPlayer = <?php echo $pokemonPlayer->toJson();?>
@@ -52,6 +44,24 @@ if("{{$infoPlayerConnected}}" !== null){
 </script>
 
 <br<br>
+<div class="ecranRecherchePlayers">
+  <div class="playerGauche">
+    <img class="imgPlayerGauche" src="{{asset('img/battle/imgPhotoProfil.jpg')}}">
+    <div class="namePlayerGauche">
+      Player name
+    </div>
+  <div><!--
+  <div class="imgVSCentre">
+    <img class="imgVS" src="{{asset('/img/battle/battleVersus.gif')}}"/>
+  </div>
+  <div class="imgSearchCentre">
+    <img class="imgSearch" src="{{asset('/img/battle/battleSearchPlayer.gif')}}"/>
+  </div>
+  <div class="playerDroite">
+    <img class="imgPlayerDroite" src="{{asset('img/battle/imgPhotoProfil.jpg')}}">
+  <div>-->
+</div>
+
 <div class="ecranGaucheJeu">
   <div class="game">
     <div class="opponent">

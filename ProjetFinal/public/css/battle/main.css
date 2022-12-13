@@ -3,10 +3,70 @@ body {
     font-size: 20px;
   }
   
+  .playerGauche{
+    position: relative;
+    float: left;
+    height: 100%;
+  }
+
+  .ecranRecherchePlayers{
+    margin: auto;
+    position: relative;
+    background-image: url('http://bit.ly/pokemonbg');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    border: 3px solid black;
+    border-radius: 8px 8px 0 0;
+    height: 480px;
+    width: 800px;
+  }
+
+  .imgPlayerGauche{
+    position: relative;
+    float: left;
+  }
+
+  .namePlayerGauche{
+    position: relative;
+    top: 110px;
+    text-align: center;
+  }
+
+
+  .imgVS{
+    position: absolute;
+    right: 150px;
+    display: none;
+  }
+
+  .imgSearch{
+    position: absolute;
+    right: 150px;
+    width: 200px;
+    left: 300px;
+    top: 150px;
+  }
+
+  .imgPlayerDroite{
+    position: relative;
+    float: right;
+  }
+
+  .imgPlayerGauche, .imgPlayerDroite{
+    position: relative;
+    margin: auto;
+    width: 200px;
+    height: 200px;
+    border-radius: 20px;
+    top: 120px;
+    padding: 15px;
+  }
+
   .ecranGaucheJeu{
     position: relative;
     float: left;
     width: 50%;
+    display: none;
   }
 
   .ecranDroiteJeu{
@@ -14,6 +74,7 @@ body {
     float: right;
     width: 50%;
     left: 50px;
+    display: none;
 
   }
 
@@ -27,6 +88,8 @@ body {
     height: 480px;
     width: 800px;
   }
+
+
   
   .opponent {
     position: relative;
