@@ -1,13 +1,12 @@
 body {
     font-family: monospace;
     font-size: 20px;
+    background-image: url('/img/battle/background.jpg');
+    background-size: 100%;
+    background-repeat: no-repeat;
   }
   
-  .playerGauche{
-    position: relative;
-    float: left;
-    height: 100%;
-  }
+  
 
   .ecranRecherchePlayers{
     margin: auto;
@@ -19,24 +18,25 @@ body {
     border-radius: 8px 8px 0 0;
     height: 480px;
     width: 800px;
+    
   }
 
-  .imgPlayerGauche{
-    position: relative;
+  .playerGauche{
     float: left;
+    height: 100%;
   }
 
-  .namePlayerGauche{
+  .namePlayer{
     position: relative;
-    top: 110px;
     text-align: center;
+    top: 140px;
   }
-
 
   .imgVS{
     position: absolute;
     right: 150px;
     display: none;
+    
   }
 
   .imgSearch{
@@ -47,18 +47,20 @@ body {
     top: 150px;
   }
 
-  .imgPlayerDroite{
-    position: relative;
+  .playerDroite{
     float: right;
+    height: 100%;
   }
 
   .imgPlayerGauche, .imgPlayerDroite{
     position: relative;
-    margin: auto;
-    width: 200px;
-    height: 200px;
+    max-width: 280px;
+    min-width: 250px;
+    max-height: 200px;
+    min-height: 140px;
+    vertical-align: middle;
     border-radius: 20px;
-    top: 120px;
+    top: 130px;
     padding: 15px;
   }
 

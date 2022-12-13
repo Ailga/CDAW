@@ -32,8 +32,11 @@ let objPokemonPlayer = <?php echo $pokemonPlayer->toJson();?>
 
 let objPokemonOpponent = <?php echo $pokemonOpponent->toJson();?>
 
+let objPlayer = <?php echo $infoPlayerConnected->toJson();?>
+
 let playerOnline = false;
 
+setObjPlayer(objPlayer);
 setObjPokemonPlayer(objPokemonPlayer);
 setObjPokemonOpponent(objPokemonOpponent);
 
@@ -46,11 +49,13 @@ if("{{$infoPlayerConnected}}" !== null){
 <br<br>
 <div class="ecranRecherchePlayers">
   <div class="playerGauche">
-    <img class="imgPlayerGauche" src="{{asset('img/battle/imgPhotoProfil.jpg')}}">
-    <div class="namePlayerGauche">
-      Player name
+    <img class="imgPlayerGauche" src="{{$infoPlayerConnected->profile_photo_path}}">
+    <div class="namePlayer">
+    {{$infoPlayerConnected->name}}
+    <br>
+    Level {{$infoPlayerConnected->level}}
     </div>
-  <div><!--
+  </div>
   <div class="imgVSCentre">
     <img class="imgVS" src="{{asset('/img/battle/battleVersus.gif')}}"/>
   </div>
@@ -59,7 +64,10 @@ if("{{$infoPlayerConnected}}" !== null){
   </div>
   <div class="playerDroite">
     <img class="imgPlayerDroite" src="{{asset('img/battle/imgPhotoProfil.jpg')}}">
-  <div>-->
+    <div class="namePlayer">
+      Recherche
+    </div>
+  <div>
 </div>
 
 <div class="ecranGaucheJeu">

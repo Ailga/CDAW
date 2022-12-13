@@ -6,9 +6,18 @@ let ip_address = "127.0.0.1";
 let socket_port = '3000';
 let socket = io(ip_address + ':' + socket_port);
 
+function setObjPlayer(jsonPlayer){
+  player.profile = {}
+  player.profile.id = jsonPlayer.id;
+  player.profile.name = jsonPlayer.name;
+  player.profile.level = jsonPlayer.level;
+  player.profile.imgProfil = jsonPlayer.profile_photo_path;
+  opponent.profile = {};
+  recherchePlayer();
+}
+
 function setObjPokemonPlayer(jsonPokemon){
   tourBattle.player = {};
-  player.status = "NOK";
   player.pokemon = {}
   player.pokemon = jsonPokemon;
   player.pokemon.hp = player.pokemon.pv_max;
@@ -30,10 +39,22 @@ function setObjPokemonOpponent(jsonPokemon){
   console.log("obj pokemon opponent set ! pokemon : " + opponent.pokemon.name);
 }
 
+
+function recherchePlayer(){
+  console.log("Recherche d'un joueur en cours ...");
+  let message = {};
+  message.type = "recherchePlayer";
+  message.infoPlayer = player;
+  player.status = "recherchePlayer";
+  socket.emit('sendDataToOpponent', message);
+}
+
+
 function notifyMessage(whichPlayer, message){
   console.log("Notification : " + " Pour  " + whichPlayer + ", message : " + message);
   $("#info" + whichPlayer)[0].children.notification.innerText = message;
 }
+
 
 function resetStateBtnAndPlayer(){
   player.status = "NOK";
@@ -111,7 +132,6 @@ function actionContinue(){
   checkIfBothPlayersAreOk();
 }
 
-
 function checkIfBothPlayersAreOk(){
   if((player.status == "OK") && (opponent.status == "OK")){
     console.log("tous les players sont OK");
@@ -141,8 +161,6 @@ function doAttackv2(actionPlayer){
   socket.emit('sendDataToOpponent', message);
 }
 
-
-
 socket.on('sendDataToPlayer', (message) => {
   if(message.type == "action"){
     opponent.action = message.action;
@@ -162,70 +180,14 @@ socket.on('sendDataToPlayer', (message) => {
     }else{
       opponent.status = "NOK";
     }
+  }else if(message.type == "recherchePlayer"){
+    opponent.profile = message.infoPlayer.profile;
+    console.log("Opponent " + message.infoPlayer.profile.name + " recherche quelqu'un.");
+    if(player.status == "recherchePlayer"){
+      console.log("Les 2 joueurs " + player.profile.name + " et " + opponent.profile.name + " sont dispos pour un combat");
+    }else{
+      console.log("Opponent " + message.infoPlayer.profile.name + " prêt mais pas le player");
+    }
   }
 });
-
-
-
-
-
-
-
-function doAttack(whichPlayer, typeAttack){
-  let stillAlive = true;
-  if(typeAttack == "attaqueNormale"){
-    if(player.pokemon.availableNormalAttack){
-      // Attaque normale possible
-      notifyMessage(whichPlayer, "Pokemon " + player.pokemon.name + " fait sont attaque normale ! Dégats : " + player.pokemon.scoreNormalAttack);
-      stillAlive = isAliveAfterAttack(whichPlayer, opponent.pokemon, player.pokemon.scoreNormalAttack);
-    }else{
-      // TODO Pas d'attaque normale possible
-    }    
-  }else if(typeAttack == "attaqueSpeciale"){
-    if(player.pokemon.availableSpecialAttack){
-      // Attaque spéciale possible
-      notifyMessage(whichPlayer, "Pokemon " + player.pokemon.name +" fait sont attaque spéciale ! Dégats : " + player.pokemon.scoreSpecialAttack);
-      stillAlive = isAliveAfterAttack(whichPlayer, opponent.pokemon, player.pokemon.scoreSpecialAttack);
-      player.pokemon.availableSpecialAttack = false;
-    }else{
-      // TODO Pas d'attaque normale possible
-      alert("impossible de faire l'attaque spéciale");
-    } 
-  }
-}
-
-
-function doDefense(whichPlayer, pokemon, degatAttaque){
-  if(pokemon.availableSpecialDefense){
-    // Défense possible
-    let degatDefense = pokemon.scoreSpecialDefense - degatAttaque;
-    let newPokemonHp = pokemon.hp - degatDefense;
-    notifyMessage(whichPlayer, "Pokemon fait sa défense spéciale ! Dégats reçu : " + degatDefense);
-    pokemon.availableSpecialDefense = false;
-    pokemon.hp = newPokemonHp;
-  }else{
-  // Pas de défense possible
-  notifyMessage(whichPlayer, "Pokemon "+ pokemon.name + " ne peut pas se défendre, hp = " + pokemon.hp + " et dégat attaque = " + degatAttaque);
-  pokemon.hp = pokemon.hp - degatAttaque;
-  }
-}
-
-
-
-function isAliveAfterAttack(whichPlayer, pokemon, scoreDegat){
-  doDefense("Opponent", pokemon, scoreDegat);
-  if(whichPlayer == "Player"){
-    $(".player")[0].children[0].children[0].children.myHP.innerText = pokemon.hp;
-  }else{
-    $(".opponent")[0].children[0].children[0].children.apHP.innerText = pokemon.hp;
-  }
-  if(pokemon.hp <=0){
-    alert("Pokemon " + pokemon.name + " mort");
-    notifyMessage(whichPlayer, "Pokemon " + pokemon.name + " mort");
-    return false;
-  }else{
-    notifyMessage(whichPlayer, "Pokemon " + pokemon.name + " attaqué !");
-    return true;
-  }
-}
 
