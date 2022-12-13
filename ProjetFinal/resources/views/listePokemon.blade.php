@@ -1,31 +1,17 @@
-@extends('navigation-menu')
 @extends('template')
+@extends('footer')
+@extends('navigation-menu')
 @section('content')
 
 <head>
-<script src="https://code.jquery.com/jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="{{asset('css/datatableStyles.css')}}">
-<link rel="stylesheet" href="{{asset('css/entete.css')}}">
+  <script src="https://code.jquery.com/jquery-1.9.1.min.js" type="text/javascript"></script>
+  <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="{{asset('css/datatableStyles.css')}}">
 </head>
 
-<body class="form-v6">
-
-<nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
-	  <div class="container px-5">
-		  <a class="navbar-brand fw-bold" href="/">Pokemon</a>
-	  </div>
-  </nav>
-  <div class="collapse navbar-collapse" id="navbarResponsive">
-      @auth
-        <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" data-bs-toggle="modal" data-bs-target="#feedbackModal">
-          <span class="d-flex align-items-center">
-            <a class="small" href="{{ url('/dashboard') }}">Dashboard</a>
-          </span>
-        </button>
-      @endauth
-
+<body>
+  @section('menu')
 <div class="container">
 
 <table id='myTable' class='display'>
@@ -44,6 +30,7 @@
 
 </tbody></table></div>
 
+@section('footer')
 
 </body>
 
