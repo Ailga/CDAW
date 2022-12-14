@@ -40,6 +40,7 @@ setObjPlayer(objPlayer);
 setObjPokemonPlayer(objPokemonPlayer);
 setObjPokemonOpponent(objPokemonOpponent);
 
+
 if("{{$infoPlayerConnected}}" !== null){
   playerOnline = true;
 }
@@ -49,7 +50,14 @@ if("{{$infoPlayerConnected}}" !== null){
 <br<br>
 <div class="ecranRecherchePlayers">
   <div class="playerGauche">
-    <img class="imgPlayerGauche" src="{{$infoPlayerConnected->profile_photo_path}}">
+  <img class="imgPlayerGauche" id="imgPlayerGauche" src="{{$infoPlayerConnected->profile_photo_path}}">
+    <script>
+      if("{{$infoPlayerConnected->profile_photo_path}}" == ''){
+        const imgPlayerGauche = document.getElementById("imgPlayerGauche");
+        imgPlayerGauche.src = "{{asset('/img/battle/imgPhotoProfil.jpg')}}";
+      }
+    </script>
+    
     <div class="namePlayer">
     {{$infoPlayerConnected->name}}
     <br>

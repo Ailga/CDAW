@@ -1,6 +1,7 @@
 var player = {};
 var opponent = {};
 var tourBattle = {};
+var battle = {};
 
 let ip_address = "127.0.0.1";
 let socket_port = '3000';
@@ -55,7 +56,16 @@ function notifyMessage(whichPlayer, message){
   $("#info" + whichPlayer)[0].children.notification.innerText = message;
 }
 
+function setSearchPageAfterOpponentFound(opponent){
+  if(opponent.profile.imgProfil == null){
+    opponent.profile.imgProfil = "/img/battle/imgPhotoProfil.jpg";
+  }
 
+  $(".imgPlayerDroite").attr('src', opponent.profile.imgProfil);
+  $(".playerDroite .namePlayer").html(opponent.profile.name + "<br>Level " + opponent.profile.level);
+  $(".imgSearch").css("display", "none");
+  $(".imgVS").css("display", "initial");
+}
 function resetStateBtnAndPlayer(){
   player.status = "NOK";
   opponent.status = "NOK";
@@ -185,9 +195,31 @@ socket.on('sendDataToPlayer', (message) => {
     console.log("Opponent " + message.infoPlayer.profile.name + " recherche quelqu'un.");
     if(player.status == "recherchePlayer"){
       console.log("Les 2 joueurs " + player.profile.name + " et " + opponent.profile.name + " sont dispos pour un combat");
+      battle.player = player;
+      battle.player.IDsocket = socket.id;
+      battle.opponent = opponent;
+      battle.score = [0, 0];      //   Format [scorePlayer, scoreOpponent]
+      console.log("Info battle envoyé : " + battle);
+
+      let messageTmp = {};
+      messageTmp.type = "playerFound";
+      messageTmp.content = battle;
+      socket.emit('sendDataToOpponent', messageTmp);
+      
+      setSearchPageAfterOpponentFound(battle.opponent);
+
     }else{
       console.log("Opponent " + message.infoPlayer.profile.name + " prêt mais pas le player");
     }
+  }else if(message.type == "playerFound"){
+    // Les 2 savent qu'ils sont OK pour combattre ensemble
+    battle.opponent = message.content.player;
+    battle.player = player;
+    battle.player.IDsocket = socket.id;
+    battle.score = [0, 0];
+    console.log("Les 2 players savent qu'ils peuvent combattre ensemble");
+    
+    setSearchPageAfterOpponentFound(battle.opponent);
   }
 });
 
