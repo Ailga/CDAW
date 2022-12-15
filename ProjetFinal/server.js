@@ -16,8 +16,14 @@ io.on('connection', (socket) => {
 
     socket.on('sendDataToOpponent', (message) => {
         console.log(message);
-
-        socket.broadcast.emit('sendDataToPlayer', message);
+        message.sourceSocketID = socket.id;
+        if(message.type == "playerFound"){
+            console.log("envoi à l'ID spécifique");
+            socket.broadcast.to(message.content.opponent.IDsocket).emit('sendDataToPlayer', message);
+        }else{
+            console.log("envoi à tous");
+            socket.broadcast.emit('sendDataToPlayer', message);
+        }
     });
 
 

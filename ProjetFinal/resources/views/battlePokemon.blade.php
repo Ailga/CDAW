@@ -20,17 +20,15 @@
 
 <h2>Pokemon Adversaire </h2>
 <ul>
-  <li>Name : {{$pokemonOpponent->name}}</li>
-  <li>Energy : {{$pokemonOpponent->energy->name}}</li>
-  <li>Icon energy : <img src="{{$pokemonOpponent->energy->pathIcon}}"/></li>
-  <li>Hp : {{$pokemonOpponent->pv_max}}</li>
+  <li>Name : pokemonOpponent name</li>
+  <li>Energy : pokemonOpponent energy name</li>
+  <li>Icon energy : <img src="pokemonOpponent energy pathicon"/></li>
+  <li>Hp : pokemonOpponent pv_max</li>
 </ul>
 -->
 <script>
 // On envoie les objets pokemon sous format JSON au fichier js
 let objPokemonPlayer = <?php echo $pokemonPlayer->toJson();?>
-
-let objPokemonOpponent = <?php echo $pokemonOpponent->toJson();?>
 
 let objPlayer = <?php echo $infoPlayerConnected->toJson();?>
 
@@ -38,7 +36,7 @@ let playerOnline = false;
 
 setObjPlayer(objPlayer);
 setObjPokemonPlayer(objPokemonPlayer);
-setObjPokemonOpponent(objPokemonOpponent);
+//setObjPokemonOpponent(objPokemonOpponent);
 
 
 if("{{$infoPlayerConnected}}" !== null){
@@ -49,6 +47,9 @@ if("{{$infoPlayerConnected}}" !== null){
 
 <br<br>
 <div class="ecranRecherchePlayers">
+  <div class="messageLancementCombat">
+      Lancement dans 5 
+  </div>
   <div class="playerGauche">
   <img class="imgPlayerGauche" id="imgPlayerGauche" src="{{$infoPlayerConnected->profile_photo_path}}">
     <script>
@@ -76,6 +77,7 @@ if("{{$infoPlayerConnected}}" !== null){
       Recherche
     </div>
   <div>
+  
 </div>
 
 <div class="ecranGaucheJeu">
@@ -90,16 +92,16 @@ if("{{$infoPlayerConnected}}" !== null){
             <div class="pokeball"></div>
             <div class="pokeball"></div>
           </div>
-          <div id = "apHP" class="hp-count">{{$pokemonOpponent->pv_max}}</div>
+          <div id = "apHP" class="hp-count">pokemonOpponent pv_max</div>
         </div>
-        <span class="name">
-          {{$pokemonOpponent->name}}
+        <span class="name" id="pokemonOpponentName">
+          pokemonOpponent name
         </span>
-        <span class="level">
-          {{$pokemonOpponent->level}}
+        <span class="level" id="pokemonOpponentLevel">
+          pokemonOpponent level
         </span>
       </div>
-      <img class="pokemon" src="{{$pokemonOpponent->pathImg}}" alt ="A sprite of the opponent pokemon" />
+      <img class="pokemon" id="pokemonOpponentImg" src="" alt ="A sprite of the opponent pokemon" />
     </div>
     <div class="player">
       <div class="stats">
@@ -187,7 +189,7 @@ if("{{$infoPlayerConnected}}" !== null){
       </div>
       <h4>Notification opponent : </h4>
       <div id="notification">
-        Que doit faire {{$pokemonOpponent->name}}?
+        Que doit faire pokemonOpponent name?
       </div>
     </div>
   </div>

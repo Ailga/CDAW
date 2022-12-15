@@ -64,6 +64,16 @@ body {
     padding: 15px;
   }
 
+  .messageLancementCombat{
+    position: relative;
+    text-align: center;
+    background-color: aquamarine;
+    color:brown;
+    opacity: 1;
+    transition: 2s opacity;
+    display: none;
+  }
+
   .ecranGaucheJeu{
     position: relative;
     float: left;

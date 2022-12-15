@@ -40,7 +40,6 @@ function setObjPokemonOpponent(jsonPokemon){
   console.log("obj pokemon opponent set ! pokemon : " + opponent.pokemon.name);
 }
 
-
 function recherchePlayer(){
   console.log("Recherche d'un joueur en cours ...");
   let message = {};
@@ -49,7 +48,6 @@ function recherchePlayer(){
   player.status = "recherchePlayer";
   socket.emit('sendDataToOpponent', message);
 }
-
 
 function notifyMessage(whichPlayer, message){
   console.log("Notification : " + " Pour  " + whichPlayer + ", message : " + message);
@@ -65,7 +63,47 @@ function setSearchPageAfterOpponentFound(opponent){
   $(".playerDroite .namePlayer").html(opponent.profile.name + "<br>Level " + opponent.profile.level);
   $(".imgSearch").css("display", "none");
   $(".imgVS").css("display", "initial");
+
+  $(".messageLancementCombat").css("display", "initial");
+  var secRestante = 5;
+  function showMsgLaunchBattle(){
+    $(".messageLancementCombat").text("Lancement dans " + secRestante);
+    fadeOutLaunchMsg();
+    window.setTimeout(fadeInLaunchMsg, 500);
+    if(secRestante == 0){
+      window.clearInterval(timerBeforeLaunch);
+      console.log("Lancement de la battle ...")
+      $(".messageLancementCombat").text("Lancement en cours...");
+      console.log("Info battle possédée : " + JSON.stringify(battle));
+      launchBattleScreen();
+    }
+    secRestante --;
+  }
+
+  function fadeInLaunchMsg(){
+    $(".messageLancementCombat").css("opacity", "1");
+  }
+
+  function fadeOutLaunchMsg(){
+    $(".messageLancementCombat").css("opacity", "0");
+  }
+
+  var timerBeforeLaunch = window.setInterval(showMsgLaunchBattle, 1000);
+  
 }
+
+
+function launchBattleScreen(){
+  $(".ecranRecherchePlayers").css("display", "none");
+  $(".opponent")[0].children[0].children[0].children.apHP.innerText = battle.opponent.pokemon.hp;
+  $(".opponent")[0].children[0].children.pokemonOpponentName.innerText = battle.opponent.pokemon.name;
+  $(".opponent")[0].children[0].children.pokemonOpponentLevel.innerText = battle.opponent.pokemon.level;
+  $("#pokemonOpponentImg").attr('src', battle.opponent.pokemon.pathImg);
+  $(".ecranGaucheJeu").css("display", "inline");
+  $(".ecranDroiteJeu").css("display", "inline");
+}
+
+
 function resetStateBtnAndPlayer(){
   player.status = "NOK";
   opponent.status = "NOK";
@@ -191,14 +229,15 @@ socket.on('sendDataToPlayer', (message) => {
       opponent.status = "NOK";
     }
   }else if(message.type == "recherchePlayer"){
-    opponent.profile = message.infoPlayer.profile;
+    opponent = message.infoPlayer;
     console.log("Opponent " + message.infoPlayer.profile.name + " recherche quelqu'un.");
     if(player.status == "recherchePlayer"){
       console.log("Les 2 joueurs " + player.profile.name + " et " + opponent.profile.name + " sont dispos pour un combat");
       battle.player = player;
       battle.player.IDsocket = socket.id;
       battle.opponent = opponent;
-      battle.score = [0, 0];      //   Format [scorePlayer, scoreOpponent]
+      battle.opponent.IDsocket = message.sourceSocketID;
+      battle.score = [0, 0];      // Format [scorePlayer, scoreOpponent]
       console.log("Info battle envoyé : " + battle);
 
       let messageTmp = {};

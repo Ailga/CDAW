@@ -8,13 +8,13 @@ use App\Models\Pokemon;
 
 class battlePokemonsController extends Controller
 {
-    function do_battle($namePokemonPlayer, $namePokemonOpponent){
+    function do_battle($namePokemonPlayer){
         /**
          * TODO 
          */
         $infoPlayerConnected = auth()->user();
         $pokemonPlayer = Pokemon::where('name',$namePokemonPlayer)->first();
-        $pokemonOpponent = Pokemon::where('name', $namePokemonOpponent)->first();
-        return view('battlePokemon', ['pokemonPlayer' => $pokemonPlayer, 'pokemonOpponent' => $pokemonOpponent, 'infoPlayerConnected' => $infoPlayerConnected]);
+        //$pokemonOpponent = Pokemon::where('name', $namePokemonOpponent)->first();
+        return view('battlePokemon', ['pokemonPlayer' => $pokemonPlayer, 'infoPlayerConnected' => $infoPlayerConnected]);
     }
 }
