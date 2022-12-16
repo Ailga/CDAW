@@ -76,7 +76,7 @@ if("{{$infoPlayerConnected}}" !== null){
     <div class="namePlayer">
       Recherche
     </div>
-  <div>
+  </div>
   
 </div>
 

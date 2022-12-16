@@ -1,7 +1,8 @@
 var player = {};
 var opponent = {};
-var tourBattle = {};
+var tourBattle = {};      //Contient info joueur par tour
 var battle = {};
+battle.tour = {};         //Contient tous les info de tous les tours
 
 let ip_address = "127.0.0.1";
 let socket_port = '3000';
@@ -74,7 +75,7 @@ function setSearchPageAfterOpponentFound(opponent){
       window.clearInterval(timerBeforeLaunch);
       console.log("Lancement de la battle ...")
       $(".messageLancementCombat").text("Lancement en cours...");
-      console.log("Info battle possédée : " + JSON.stringify(battle));
+      //console.log("Info battle possédée : " + JSON.stringify(battle));
       launchBattleScreen();
     }
     secRestante --;
@@ -92,7 +93,6 @@ function setSearchPageAfterOpponentFound(opponent){
   
 }
 
-
 function launchBattleScreen(){
   $(".ecranRecherchePlayers").css("display", "none");
   $(".opponent")[0].children[0].children[0].children.apHP.innerText = battle.opponent.pokemon.hp;
@@ -101,8 +101,11 @@ function launchBattleScreen(){
   $("#pokemonOpponentImg").attr('src', battle.opponent.pokemon.pathImg);
   $(".ecranGaucheJeu").css("display", "inline");
   $(".ecranDroiteJeu").css("display", "inline");
+  battle.indexTour = 0;    //Correspond au premier tour de la battle
+  battle.tour[0] = {};
+  battle.tour[0].player = player;
+  battle.tour[0].opponent = opponent;
 }
-
 
 function resetStateBtnAndPlayer(){
   player.status = "NOK";
@@ -194,19 +197,20 @@ function doAttackv2(actionPlayer){
   let message = {};
   message.type = "action";
   message.actionPlayer = actionPlayer;
-
+  console.log("info battle attack v2 : " + JSON.stringify(battle.tour));
   if(opponent.action.type == "defenseSpeciale"){
     if(player.action.type == "defenseSpeciale"){
       console.log("Chacun c'est défendu, aucun dégat reçus");
     }else{
-      opponent.pokemon.hp = opponent.pokemon.hp - Math.abs(opponent.action.score - player.action.score)
+      battle.tour[battle.indexTour].opponent.pokemon.hp = battle.tour[battle.indexTour].opponent.pokemon.hp - Math.abs(battle.tour[battle.indexTour].opponent.action.score - player.action.score)
     }
   }else{
-    opponent.pokemon.hp = opponent.pokemon.hp - message.actionPlayer.score;
+    battle.tour[battle.indexTour].opponent.pokemon.hp = battle.tour[battle.indexTour].opponent.pokemon.hp - message.actionPlayer.score;
   }
-  $(".opponent")[0].children[0].children[0].children.apHP.innerText = opponent.pokemon.hp;
-  message.opponentHp = opponent.pokemon.hp;
+  $(".opponent")[0].children[0].children[0].children.apHP.innerText = battle.tour[battle.indexTour].opponent.pokemon.hp;
+  message.opponentHp = battle.tour[battle.indexTour].opponent.pokemon.hp;
   socket.emit('sendDataToOpponent', message);
+  battle.indexTour ++;
 }
 
 socket.on('sendDataToPlayer', (message) => {
