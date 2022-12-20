@@ -97,14 +97,15 @@ function launchBattleScreen(){
   $(".ecranRecherchePlayers").css("display", "none");
   $(".opponent")[0].children[0].children[0].children.apHP.innerText = battle.opponent.pokemon.hp;
   $(".opponent")[0].children[0].children.pokemonOpponentName.innerText = battle.opponent.pokemon.name;
-  $(".opponent")[0].children[0].children.pokemonOpponentLevel.innerText = battle.opponent.pokemon.level;
+  $(".opponent")[0].children[0].children.pokemonOpponentLevel.innerText = " " + battle.opponent.pokemon.level;
   $("#pokemonOpponentImg").attr('src', battle.opponent.pokemon.pathImg);
   $(".ecranGaucheJeu").css("display", "inline");
   $(".ecranDroiteJeu").css("display", "inline");
   battle.indexTour = 0;    //Correspond au premier tour de la battle
   battle.tour[0] = {};
   battle.tour[0].player = player;
-  battle.tour[0].opponent = opponent;
+  battle.tour[0].opponent = battle.opponent;
+  console.log("test opponent = " + JSON.stringify(battle.opponent));
 }
 
 function resetStateBtnAndPlayer(){
@@ -197,7 +198,6 @@ function doAttackv2(actionPlayer){
   let message = {};
   message.type = "action";
   message.actionPlayer = actionPlayer;
-  console.log("info battle attack v2 : " + JSON.stringify(battle.tour));
   if(opponent.action.type == "defenseSpeciale"){
     if(player.action.type == "defenseSpeciale"){
       console.log("Chacun c'est défendu, aucun dégat reçus");
@@ -210,6 +210,8 @@ function doAttackv2(actionPlayer){
   $(".opponent")[0].children[0].children[0].children.apHP.innerText = battle.tour[battle.indexTour].opponent.pokemon.hp;
   message.opponentHp = battle.tour[battle.indexTour].opponent.pokemon.hp;
   socket.emit('sendDataToOpponent', message);
+  battle.tour[battle.indexTour + 1] = {};
+  battle.tour[battle.indexTour + 1] = battle.tour[battle.indexTour];
   battle.indexTour ++;
 }
 
