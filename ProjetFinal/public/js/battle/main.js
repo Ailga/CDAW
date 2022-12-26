@@ -8,6 +8,7 @@ let ip_address = "127.0.0.1";
 let socket_port = '3000';
 let socket = io(ip_address + ':' + socket_port);
 
+
 function setObjPlayer(jsonPlayer){
   player.profile = {}
   player.profile.id = jsonPlayer.id;
@@ -98,6 +99,11 @@ function launchBattleScreen(){
   $(".opponent")[0].children[0].children[0].children.apHP.innerText = battle.opponent.pokemon.hp;
   $(".opponent")[0].children[0].children.pokemonOpponentName.innerText = battle.opponent.pokemon.name;
   $(".opponent")[0].children[0].children.pokemonOpponentLevel.innerText = " " + battle.opponent.pokemon.level;
+  $("#infoOpponent")[0].children.statutOpponent.innerText = "Status : Online ✅"
+  $("#infoOpponent #statutOpponent").css("color", "green");
+  $("#infoOpponent")[0].children.name.innerText = "Name : " + battle.opponent.profile.name;
+  $("#infoOpponent")[0].children.level.innerText = "Level : " + battle.opponent.profile.level;
+
   $("#pokemonOpponentImg").attr('src', battle.opponent.pokemon.pathImg);
   $(".ecranGaucheJeu").css("display", "inline");
   $(".ecranDroiteJeu").css("display", "inline");
@@ -168,9 +174,11 @@ function prepareAction(actionPlayer){
   player.action = actionPlayer;
   $("#message")[0].innerText = "Cliquez sur continuer";
   $("#btnContinue").addClass("btnEnabled");
+  console.log("tourbattle prepareAction = " + JSON.stringify(tourBattle));
 }
 
 function actionContinue(){
+  console.log("tourbattle actionContinue = " + JSON.stringify(tourBattle));
   $("#message")[0].innerText = "En attente du joueur 2 ...";
   $("#btnContinue").addClass("btnClicked");
   tourBattle.player.status = "OK";
@@ -198,7 +206,10 @@ function doAttackv2(actionPlayer){
   let message = {};
   message.type = "action";
   message.actionPlayer = actionPlayer;
+  //console.log("Var battle = " + JSON.stringify(battle));
+  battle.tour[battle.indexTour].opponent.action = opponent.action;
   if(opponent.action.type == "defenseSpeciale"){
+    alert("opponent action defense speciale = " + JSON.stringify(opponent.action));
     if(player.action.type == "defenseSpeciale"){
       console.log("Chacun c'est défendu, aucun dégat reçus");
     }else{
@@ -214,6 +225,7 @@ function doAttackv2(actionPlayer){
   battle.tour[battle.indexTour + 1] = battle.tour[battle.indexTour];
   battle.indexTour ++;
 }
+
 
 socket.on('sendDataToPlayer', (message) => {
   if(message.type == "action"){
