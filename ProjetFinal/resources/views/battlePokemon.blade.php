@@ -28,7 +28,9 @@
 -->
 <script>
 // On envoie les objets pokemon sous format JSON au fichier js
-let objPokemonPlayer = <?php echo $pokemonPlayer->toJson();?>
+let objListePokemonsPlayer = <?php echo $pokemonsPlayer->toJson();?>
+
+let objPokemonPlayer = objListePokemonsPlayer[0];
 
 let objPlayer = <?php echo $infoPlayerConnected->toJson();?>
 
@@ -36,6 +38,7 @@ let playerOnline = false;
 
 setObjPlayer(objPlayer);
 setObjPokemonPlayer(objPokemonPlayer);
+setObjListePokemonPlayer(objListePokemonsPlayer);
 //setObjPokemonOpponent(objPokemonOpponent);
 
 

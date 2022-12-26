@@ -1,6 +1,8 @@
 var player = {};
 var opponent = {};
 var tourBattle = {};      //Contient info joueur par tour
+var listePokemonPlayer = {};  //Contient les 3 pokemons du player
+var listePokemonOpponent = {};  //Contient les 3 pokemons de l'opponent
 var battle = {};
 battle.tour = {};         //Contient tous les info de tous les tours
 
@@ -16,7 +18,18 @@ function setObjPlayer(jsonPlayer){
   player.profile.level = jsonPlayer.level;
   player.profile.imgProfil = jsonPlayer.profile_photo_path;
   opponent.profile = {};
+  
+}
+
+function setObjListePokemonPlayer(jsonListePokemon){
+  console.log("Liste pokemon player set = " + JSON.stringify(jsonListePokemon));
+  listePokemonPlayer.index = 0;
+  listePokemonPlayer.data = jsonListePokemon;
   recherchePlayer();
+}
+function setObjListePokemonOpponent(jsonListePokemon){
+  console.log("Liste pokemon opponent set = " + JSON.stringify(jsonListePokemon));
+  listePokemonOpponent = jsonListePokemon;
 }
 
 function setObjPokemonPlayer(jsonPokemon){
@@ -46,6 +59,7 @@ function recherchePlayer(){
   console.log("Recherche d'un joueur en cours ...");
   let message = {};
   message.type = "recherchePlayer";
+  player.listePokemon = listePokemonPlayer;
   message.infoPlayer = player;
   player.status = "recherchePlayer";
   socket.emit('sendDataToOpponent', message);
@@ -111,7 +125,6 @@ function launchBattleScreen(){
   battle.tour[0] = {};
   battle.tour[0].player = player;
   battle.tour[0].opponent = battle.opponent;
-  console.log("test opponent = " + JSON.stringify(battle.opponent));
 }
 
 function resetStateBtnAndPlayer(){
@@ -166,7 +179,6 @@ function chooseActionPlayerTour(whichPlayer, typeAttack){
   actionPlayer.type = typeAttack;
   prepareAction(actionPlayer);
   $("#" + typeAttack).addClass("btnClicked");
-
 }
 
 function prepareAction(actionPlayer){
@@ -174,11 +186,9 @@ function prepareAction(actionPlayer){
   player.action = actionPlayer;
   $("#message")[0].innerText = "Cliquez sur continuer";
   $("#btnContinue").addClass("btnEnabled");
-  console.log("tourbattle prepareAction = " + JSON.stringify(tourBattle));
 }
 
 function actionContinue(){
-  console.log("tourbattle actionContinue = " + JSON.stringify(tourBattle));
   $("#message")[0].innerText = "En attente du joueur 2 ...";
   $("#btnContinue").addClass("btnClicked");
   tourBattle.player.status = "OK";
@@ -221,9 +231,14 @@ function doAttackv2(actionPlayer){
   $(".opponent")[0].children[0].children[0].children.apHP.innerText = battle.tour[battle.indexTour].opponent.pokemon.hp;
   message.opponentHp = battle.tour[battle.indexTour].opponent.pokemon.hp;
   socket.emit('sendDataToOpponent', message);
+  console.log("Info battle du tour " + battle.indexTour + " = " + JSON.stringify(battle.tour[battle.indexTour]));
   battle.tour[battle.indexTour + 1] = {};
   battle.tour[battle.indexTour + 1] = battle.tour[battle.indexTour];
   battle.indexTour ++;
+}
+
+function pokemonDied(pokemonJustDied, listPokemon){
+  alert("Votre pokemon " + pokemonJustDied.name + " est mort !");
 }
 
 
@@ -247,16 +262,17 @@ socket.on('sendDataToPlayer', (message) => {
       opponent.status = "NOK";
     }
   }else if(message.type == "recherchePlayer"){
-    opponent = message.infoPlayer;
     console.log("Opponent " + message.infoPlayer.profile.name + " recherche quelqu'un.");
     if(player.status == "recherchePlayer"){
+      opponent = message.infoPlayer;
+      player.status = "NOK";
+      opponent.status = "NOK";
       console.log("Les 2 joueurs " + player.profile.name + " et " + opponent.profile.name + " sont dispos pour un combat");
       battle.player = player;
       battle.player.IDsocket = socket.id;
       battle.opponent = opponent;
       battle.opponent.IDsocket = message.sourceSocketID;
       battle.score = [0, 0];      // Format [scorePlayer, scoreOpponent]
-      console.log("Info battle envoyé : " + battle);
 
       let messageTmp = {};
       messageTmp.type = "playerFound";
@@ -269,6 +285,8 @@ socket.on('sendDataToPlayer', (message) => {
       console.log("Opponent " + message.infoPlayer.profile.name + " prêt mais pas le player");
     }
   }else if(message.type == "playerFound"){
+    player.status = "NOK";
+    opponent.status = "NOK";
     // Les 2 savent qu'ils sont OK pour combattre ensemble
     battle.opponent = message.content.player;
     battle.player = player;
