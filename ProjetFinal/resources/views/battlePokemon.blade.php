@@ -167,10 +167,6 @@ if("{{$infoPlayerConnected}}" !== null){
       <div id="level">
         Level : {{$infoPlayerConnected->level}}
       </div>
-      <h4>Notification player : </h4>
-      <div id="notification">
-        Que doit faire {{$pokemonPlayer->name}}?
-      </div>
     </div>
 
     <div id="infoOpponent">
@@ -186,10 +182,6 @@ if("{{$infoPlayerConnected}}" !== null){
       </div>
       <div id="level">
         Level : XXXXX
-      </div>
-      <h4>Notification opponent : </h4>
-      <div id="notification">
-        Que doit faire pokemonOpponent name?
       </div>
     </div>
   </div>
