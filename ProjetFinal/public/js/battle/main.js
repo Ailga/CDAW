@@ -11,64 +11,6 @@ let socket_port = '3000';
 let socket = io(ip_address + ':' + socket_port);
 
 
-class Player {
-  constructor(){
-    this.profile = {};
-    this.listePokemons = {};
-    this.status = "objectCreated";
-    this.socketID = "";
-  }
-
-  setProfilFromJson(jsonPlayer){
-    this.profile.id = jsonPlayer.id;
-    this.profile.name = jsonPlayer.name;
-    this.profile.level = jsonPlayer.level;
-    this.profile.imgProfil = jsonPlayer.profile_photo_path;
-  }
-
-  setListePokemonFromJson(jsonListePokemon){
-    this.listePokemons.index = 0;
-    this.listePokemons.data = jsonListePokemon;
-  }
-
-  setStatus(status){
-    this.status = status;
-  }
-
-  setSocketID(socketID){
-    this.socketID = socketID;
-  }
-}
-
-class Pokemon {
-  setDataFromJson(jsonPokemon){
-    this.id = jsonPokemon.id;
-    this.name = jsonPokemon.name;
-    this.id_energy = jsonPokemon.id_energy;
-    this.pv_max = jsonPokemon.pv_max;
-    this.hp = jsonPokemon.pv_max;
-    this.level = jsonPokemon.level;
-    this.weight = jsonPokemon.weight;
-    this.height = jsonPokemon.height;
-    this.pathImg = jsonPokemon.pathImg;
-    this.availableNormalAttack = jsonPokemon.availableNormalAttack;
-    this.availableSpecialAttack = jsonPokemon.availableSpecialAttack;
-    this.availableSpecialDefense = jsonPokemon.availableSpecialDefense;
-    this.scoreNormalAttack = jsonPokemon.scoreNormalAttack;
-    this.scoreSpecialAttack = jsonPokemon.scoreSpecialAttack;
-    this.scoreSpecialDefense = jsonPokemon.scoreSpecialDefense;
-  }
-}
-
-
-
-
-
-
-
-
-
-
 
 
 function setObjPlayer(jsonPlayer){
