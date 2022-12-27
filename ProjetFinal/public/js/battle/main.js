@@ -11,6 +11,20 @@ let socket_port = '3000';
 let socket = io(ip_address + ':' + socket_port);
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function setObjPlayer(jsonPlayer){
   player.profile = {}
   player.profile.id = jsonPlayer.id;
@@ -219,7 +233,6 @@ function doAttackv2(actionPlayer){
   //console.log("Var battle = " + JSON.stringify(battle));
   battle.tour[battle.indexTour].opponent.action = opponent.action;
   if(opponent.action.type == "defenseSpeciale"){
-    alert("opponent action defense speciale = " + JSON.stringify(opponent.action));
     if(player.action.type == "defenseSpeciale"){
       console.log("Chacun c'est défendu, aucun dégat reçus");
     }else{
@@ -238,7 +251,10 @@ function doAttackv2(actionPlayer){
 }
 
 function pokemonDied(pokemonJustDied, listPokemon){
-  alert("Votre pokemon " + pokemonJustDied.name + " est mort !");
+  listPokemon.index ++;
+  player.pokemon = listPokemon.data[listPokemon.index];
+  alert("Votre pokemon " + pokemonJustDied.name + " est mort !\n\n" + "Nouveau pokémon = " + player.pokemon.name);
+
 }
 
 
@@ -248,7 +264,8 @@ socket.on('sendDataToPlayer', (message) => {
     player.pokemon.hp = message.opponentHp;
     $(".player")[0].children[0].children[0].children.myHP.innerText = player.pokemon.hp;
     if(player.pokemon.hp <=0){
-      alert("Votre pokemon " + player.pokemon.name + " est mort !");
+      pokemonDied(player.pokemon, player.listePokemon);
+      //alert("Votre pokemon " + player.pokemon.name + " est mort !");
     }
   }else if(message.type == "infoBattle"){
     if(message.infoBattle.player.status == 'OK'){

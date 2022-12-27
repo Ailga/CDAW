@@ -116,22 +116,22 @@ if("{{$infoPlayerConnected}}" !== null){
             <div class="pokeball"></div>
             <div class="pokeball"></div>
           </div>
-          <div id = "myHP" class="hp-count">{{$pokemonPlayer->pv_max}}</div>
+          <div id = "myHP" class="hp-count">{{$pokemonsPlayer[0]->pv_max}}</div>
         </div>
         <span class="name">
-          {{$pokemonPlayer->name}}
+          {{$pokemonsPlayer[0]->name}}
         </span>
         <span class="level">
-          {{$pokemonPlayer->level}}
+          {{$pokemonsPlayer[0]->level}}
         </span>
       </div>
-      <img class="pokemon" src="{{$pokemonPlayer->pathImg}}" alt="A sprite of the player pokemon" />
+      <img class="pokemon" src="{{$pokemonsPlayer[0]->pathImg}}" alt="A sprite of the player pokemon" />
     </div>
   </div>
   
   <div class="box">
     <div id = "message" class="message">
-      Que doit faire {{$pokemonPlayer->name}}?
+      Que doit faire {{$pokemonsPlayer[0]->name}}?
     </div>
     <div class="actions">
       <button id="attaqueNormale" onclick = "chooseActionPlayerTour('Opponent', 'attaqueNormale')">Attaque normale</button>
