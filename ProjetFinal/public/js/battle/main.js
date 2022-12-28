@@ -29,6 +29,7 @@ function setObjListePokemonPlayer(jsonListePokemon){
   listePokemonPlayer.data = jsonListePokemon;
   recherchePlayer();
 }
+
 function setObjListePokemonOpponent(jsonListePokemon){
   console.log("Liste pokemon opponent set = " + JSON.stringify(jsonListePokemon));
   listePokemonOpponent = jsonListePokemon;

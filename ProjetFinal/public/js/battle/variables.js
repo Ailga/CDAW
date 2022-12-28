@@ -1,3 +1,45 @@
+class DebugMsg {
+    constructor() {
+        this.level = 1;          //valeur 1 à 3 (- important à ++)
+        this.type = "DEBUG";     //valeur possible DEBUG, WARN, ERROR
+        this.msg = "";
+    }
+
+    constructor(level, type, msg, outFormat){
+        this.level = level;
+        this.type = type;
+        this.msg = msg;
+
+        if(outFormat == "alerte")
+        {
+            this.alerteMsg();
+        }else if(outFormat == "console")
+        {
+            this.consoleMsg();
+        }
+    }
+
+    setDebugMsg(message){
+        this.msg = message;
+    }
+
+    setLevel(level){
+        this.level = level;
+    }
+
+    setType(type){
+        this.type = type;
+    }
+
+    alerteMsg(){
+        alert(this.type + " : " + this.msg);
+    }
+
+    consoleMsg(){
+        console.log(this.type + " : " + this.msg);
+    }
+}
+
 class Player {
     constructor(){
         this.profile = {};
@@ -15,7 +57,13 @@ class Player {
 
     setListePokemonFromJson(jsonListePokemon){
         this.listePokemons.index = 0;
-        this.listePokemons.data = jsonListePokemon;
+        this.listePokemons.data = {};
+        let index = 0;
+        jsonListePokemon.forEach(pokemonJson => {
+            this.listePokemons.data[index] = new Pokemon().setDataFromJson(pokemonJson);
+            index ++;
+        });
+        
     }
 
     setStatus(status){
@@ -45,6 +93,7 @@ class Pokemon {
         this.scoreSpecialAttack = jsonPokemon.scoreSpecialAttack;
         this.scoreSpecialDefense = jsonPokemon.scoreSpecialDefense;
     }
+    
 }
 
 class Tour {
@@ -68,52 +117,40 @@ class Battle {
         this.opponent = new Player();
         this.duree = 0;                 //durée en secondes
         this.winner = new Player();
-        this.tour = new Tour();
+        this.tour = {};
+        this.indexTour = 0;
+        this.tour[0] = new Tour();
+        this.score = [0,0];             // Format [scorePlayer, scoreOpponent]
     }
 
     constructor(player, opponent){
         this.player = player;
         this.opponent = opponent;
+        this.duree = 0;
+        this.winner = new Player();
+        this.tour = {};
+        this.indexTour = 0;
+        this.tour[0] = new Tour();
+        this.score = [0,0];             // Format [scorePlayer, scoreOpponent]
     }
 
     setDuree(dureeEnSec){
         this.duree = dureeEnSec;
     }
+
+    setPlayer(player){
+        this.player = player;
+    }
+    
+    setOpponent(player){
+        this.opponent = player;
+    }
+
+    setWinner(player){
+        this.winner = player;
+    }
 }
   
-class DebugMsg {
-    constructor() {
-        this.level = 1;          //valeur 1 à 3 (- important à ++)
-        this.type = "DEBUG";     //valeur possible DEBUG, WARN, ERROR
-        this.msg = "";
-    }
-
-    constructor(level, type, msg){
-        this.level = level;
-        this.type = type;
-        this.msg = msg;
-    }
-
-    setDebugMsg(message){
-        this.msg = message;
-    }
-
-    setLevel(level){
-        this.level = level;
-    }
-
-    setType(type){
-        this.type = type;
-    }
-
-    alerteMsg(){
-        alert(this.type + " : " + this.msg);
-    }
-
-    consoleMsg(){
-        console.log(this.type + " : " + this.msg);
-    }
-}
   
 class Socket {
     constructor(){
@@ -131,15 +168,36 @@ class Socket {
 }
 
 class MessageToEmit {
-    constructor(){
+    constructor()
+    {
         this.IDreceiver = "";       //valeur all -> pour tous sinon pour une personne spécifique
         this.IDsender = "";         //id de la socket d'origine
         this.msg = "";
         this.type = "";
         this.title = "";
+        this.socket = "";
     }
 
-    emit(socket){
-        socket.emit(this.title, this.msg);
+    constructor(receiver, title, type, content)
+    {
+        this.IDreceiver = receiver;
+        this.IDsender = "";
+        this.title = title;
+        this.type = type;
+        this.data = content;
+        this.socket = "";
+    }
+
+    setSocket(socket)
+    {
+        this.socket = socket; 
+    }
+
+    emit()
+    {
+        let message = {};
+        message.type = this.type;
+        message.data = this.data;
+        this.socket.emit(this.title, message);
     }
 }
