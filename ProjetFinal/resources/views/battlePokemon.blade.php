@@ -101,14 +101,14 @@ if("{{$infoPlayerConnected}}" !== null){
           </div>
           <div id = "myHP" class="hp-count">{{$pokemonsPlayer[0]->pv_max}}</div>
         </div>
-        <span class="name">
+        <span class="name" id="name">
           {{$pokemonsPlayer[0]->name}}
         </span>
-        <span class="level">
+        <span class="level" id="level">
           {{$pokemonsPlayer[0]->level}}
         </span>
       </div>
-      <img class="pokemon" src="{{$pokemonsPlayer[0]->pathImg}}" alt="A sprite of the player pokemon" />
+      <img class="pokemon" id="pokemonPlayerImg" src="{{$pokemonsPlayer[0]->pathImg}}" alt="A sprite of the player pokemon" />
     </div>
   </div>
   

@@ -50,7 +50,6 @@ function setSearchPageAfterOpponentFound()
             window.clearInterval(timerBeforeLaunch);
             debugMsg = new DebugMsg(3, "DEBUG", "Lancement de la battle", "console");
             $(".messageLancementCombat").text("Lancement en cours...");
-            //console.log("Info battle possédée : " + JSON.stringify(battle));
             launchBattleScreen();
         }
         secRestante --;
@@ -158,6 +157,7 @@ function actionContinue()
     $("#btnContinue").addClass("btnClicked");
     battle.tour[battle.indexTour].player.status = "OK";
     battle.tour[battle.indexTour].player.pokemon = player.listePokemons.data[player.listePokemons.index];
+    battle.tour[battle.indexTour].opponent.pokemon = opponent.listePokemons.data[opponent.listePokemons.index];
     player.status = "OK";
     $("#infoPlayer")[0].children.statutCombat.innerText = "État : Prêt";
     $("#infoPlayer #statutCombat").css("color", "green");
@@ -192,14 +192,16 @@ function doAttackv2()
     }
     else
     {
-        battle.tour[battle.indexTour].opponent.pokemon.hp = battle.tour[battle.indexTour].opponent.pokemon.hp - battle.tour[battle.indexTour].player.action.score;
+        if(battle.tour[battle.indexTour].player.action.type != "defenseSpeciale")
+        {
+            battle.tour[battle.indexTour].opponent.pokemon.hp = battle.tour[battle.indexTour].opponent.pokemon.hp - battle.tour[battle.indexTour].player.action.score;
+        }
     }
     $(".opponent")[0].children[0].children[0].children.apHP.innerText = battle.tour[battle.indexTour].opponent.pokemon.hp;
-    console.log("TEST opponentHP = " + battle.tour[battle.indexTour].opponent.pokemon.hp);
     battle.tour[battle.indexTour].player.action.opponentHP = battle.tour[battle.indexTour].opponent.pokemon.hp;
     msgSocket = new MessageToEmit("all", 'sendDataToOpponent', "action", battle.tour[battle.indexTour].player.action, socketPlayer);
     msgSocket.emit();
-    debugMsg = new DebugMsg(1, "DEBUG", "Info battle du tour n°" + battle.indexTour + " = " + JSON.stringify(battle.tour[battle.indexTour]), "console");
+    //debugMsg = new DebugMsg(1, "DEBUG", "Info battle du tour n°" + battle.indexTour + " = " + JSON.stringify(battle.tour[battle.indexTour]), "console");
     battle.tour[battle.indexTour + 1] = {};
     battle.tour[battle.indexTour + 1] = battle.tour[battle.indexTour];
     battle.indexTour ++;
@@ -209,18 +211,47 @@ function pokemonPlayerDied()
 {
     let actualPokemonName = player.listePokemons.data[player.listePokemons.index].name;
     player.listePokemons.index ++;
-    let newPokemonName = player.listePokemons.data[player.listePokemons.index].name;
-    debugMsg = new DebugMsg(3, "DEBUG", "Votre pokemon " + actualPokemonName + " est mort !\n\nNouveau pokémon = " + newPokemonName, "alerte");
+    let newPokemon = player.listePokemons.data[player.listePokemons.index];
+    debugMsg = new DebugMsg(3, "DEBUG", "Votre pokemon " + actualPokemonName + " est mort !\n\nNouveau pokémon = " + newPokemon.name, "alerte");
+    $(".player")[0].children[0].children.name.innerText = newPokemon.name;
+    $(".player")[0].children[0].children.level.innerText = newPokemon.level;
+    $(".player")[0].children[0].children[0].children.myHP.innerText = newPokemon.hp;
+    $("#pokemonPlayerImg").attr('src', newPokemon.pathImg);
+    $("#message")[0].innerText = "Que doit faire " + player.listePokemons.data[player.listePokemons.index].name + " ?";
+    msgSocket = new MessageToEmit("all", 'sendDataToOpponent', "pokemonDied", newPokemon, socketPlayer);
+    msgSocket.emit();
 }
 
+function checkIfAllPokemonDied()
+{
+    if(opponent.listePokemons.index > 2)
+    {
+        debugMsg = new DebugMsg(3, "DEBUG", "Opponent a perdu, tous ses pokémons sont morts", "alerte");
+    }
+    if(player.listePokemons.index > 2)
+    {
+        debugMsg = new DebugMsg(3, "DEBUG", "Vous avez perdu, tous vos pokémons sont morts", "alerte");
+    }
+}
 socketPlayer.socket.on('sendDataToPlayer', (message) => {
-    if(message.type == "action")
+    if(message.type == "pokemonDied")
+    {
+        let newPokemon = message.data;
+        $(".opponent")[0].children[0].children[0].children.apHP.innerText = newPokemon.hp;
+        $(".opponent")[0].children[0].children.pokemonOpponentName.innerText = newPokemon.name;
+        $(".opponent")[0].children[0].children.pokemonOpponentLevel.innerText = " " + newPokemon.level;
+        $("#pokemonOpponentImg").attr('src', newPokemon.pathImg);
+        opponent.listePokemons.index ++;
+        checkIfAllPokemonDied();
+    }
+    else if(message.type == "action")
     {
         battle.tour[battle.indexTour].opponent.action = message.data;
         player.listePokemons.data[player.listePokemons.index].hp = message.data.opponentHP;
         $(".player")[0].children[0].children[0].children.myHP.innerText = message.data.opponentHP;
         if(message.data.opponentHP <=0)
         {
+            checkIfAllPokemonDied();
             pokemonPlayerDied();
         }
     }
@@ -270,7 +301,6 @@ socketPlayer.socket.on('sendDataToPlayer', (message) => {
         battle = new Battle(player, opponent);
         battle.tour[battle.indexTour].opponent.status = "NOK";
         battle.tour[battle.indexTour].opponent.pokemon = opponent.listePokemons.data[opponent.listePokemons.index];
-        console.log("battle player found = " + JSON.stringify(battle));
         debugMsg = new DebugMsg(3, "DEBUG", "Les 2 joueurs " + player.profile.name + " et " + opponent.profile.name + " savent qu'ils peuvent combattre ensemble", "console");
         setSearchPageAfterOpponentFound();
     }
