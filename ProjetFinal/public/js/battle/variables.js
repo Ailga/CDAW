@@ -1,13 +1,7 @@
 class DebugMsg {
-    constructor() {
-        this.level = 1;          //valeur 1 à 3 (- important à ++)
-        this.type = "DEBUG";     //valeur possible DEBUG, WARN, ERROR
-        this.msg = "";
-    }
-
     constructor(level, type, msg, outFormat){
-        this.level = level;
-        this.type = type;
+        this.level = level;     //valeur 1 à 3 (- important à ++)
+        this.type = type;       //valeur possible DEBUG, WARN, ERROR
         this.msg = msg;
 
         if(outFormat == "alerte")
@@ -40,42 +34,13 @@ class DebugMsg {
     }
 }
 
-class Player {
-    constructor(){
-        this.profile = {};
-        this.listePokemons = {};
-        this.status = "objectCreated";
-        this.socketID = "";
-    }
-
-    setProfilFromJson(jsonPlayer){
-        this.profile.id = jsonPlayer.id;
-        this.profile.name = jsonPlayer.name;
-        this.profile.level = jsonPlayer.level;
-        this.profile.imgProfil = jsonPlayer.profile_photo_path;
-    }
-
-    setListePokemonFromJson(jsonListePokemon){
-        this.listePokemons.index = 0;
-        this.listePokemons.data = {};
-        let index = 0;
-        jsonListePokemon.forEach(pokemonJson => {
-            this.listePokemons.data[index] = new Pokemon().setDataFromJson(pokemonJson);
-            index ++;
-        });
-        
-    }
-
-    setStatus(status){
-        this.status = status;
-    }
-
-    setSocketID(socketID){
-        this.socketID = socketID;
-    }
-}
-  
 class Pokemon {
+
+    constructor() {
+        this.name = "";
+        this.hp = 0;
+    }
+
     setDataFromJson(jsonPokemon){
         this.id = jsonPokemon.id;
         this.name = jsonPokemon.name;
@@ -96,14 +61,61 @@ class Pokemon {
     
 }
 
+class Player {
+    constructor(){
+        this.profile = {};
+        this.listePokemons = {};
+        this.status = "objectCreated";
+        this.socketID = "";
+    }
+
+    setProfilFromJson(jsonPlayer){
+        this.profile.id = jsonPlayer.id;
+        this.profile.name = jsonPlayer.name;
+        this.profile.level = jsonPlayer.level;
+        this.profile.imgProfil = jsonPlayer.profile_photo_path;
+    }
+
+    setListePokemonFromJson(jsonListePokemon){
+        this.listePokemons.index = 0;
+        this.listePokemons.data = {};
+        let index = 0;
+        jsonListePokemon.forEach(pokemonJson => {
+            let tmpPokemon = new Pokemon();
+            tmpPokemon.setDataFromJson(pokemonJson);
+            this.listePokemons.data[index] = tmpPokemon;
+            index ++;
+        });
+    }
+
+    setStatus(status){
+        this.status = status;
+    }
+
+    setSocketID(socketID){
+        this.socketID = socketID;
+    }
+}
+
+class ActionTour {
+    constructor() {
+        this.type = "";
+        this.score = 0;
+        this.opponentHP = 0;
+    }
+}
+
 class Tour {
     constructor(){
         this.duree = 0;
-        this.starter = new Player();
-    }
-
-    constructor(playerWhoStart){
-        this.starter = playerWhoStart;
+        this.player = {};
+        this.player.action = new ActionTour();
+        this.player.status = "objectCreated";
+        this.player.pokemon = new Pokemon();
+        this.opponent = {};
+        this.opponent.action = new ActionTour();
+        this.opponent.pokemon = new Pokemon();
+        this.opponent.status = "objectCreated";
     }
 
     setDuree(dureeEnSec){
@@ -112,22 +124,10 @@ class Tour {
 }
 
 class Battle {
-    constructor() {
-        this.player = new Player();
-        this.opponent = new Player();
-        this.duree = 0;                 //durée en secondes
-        this.winner = new Player();
-        this.tour = {};
-        this.indexTour = 0;
-        this.tour[0] = new Tour();
-        this.score = [0,0];             // Format [scorePlayer, scoreOpponent]
-    }
-
     constructor(player, opponent){
         this.player = player;
         this.opponent = opponent;
         this.duree = 0;
-        this.winner = new Player();
         this.tour = {};
         this.indexTour = 0;
         this.tour[0] = new Tour();
@@ -150,47 +150,26 @@ class Battle {
         this.winner = player;
     }
 }
-  
-  
+
 class Socket {
     constructor(){
         this.adresseIP = "127.0.0.1";
         this.port = "3000";
         this.socket = io(this.adresseIP + ':' + this.port);
-        console.log("Socket créé avec ID : " + this.socket);
-    }
-
-    constructor(adresse, port){
-        this.adresseIP = adresse;
-        this.port = port;
-        this.socket = io(this.adresseIP + ':' + this.port);
+        console.log("Socket créé sur adresse: " + this.adresseIP + ':' + this.port);
     }
 }
 
 class MessageToEmit {
-    constructor()
+    
+    constructor(receiver, title, type, content, socketObj)
     {
-        this.IDreceiver = "";       //valeur all -> pour tous sinon pour une personne spécifique
-        this.IDsender = "";         //id de la socket d'origine
-        this.msg = "";
-        this.type = "";
-        this.title = "";
-        this.socket = "";
-    }
-
-    constructor(receiver, title, type, content)
-    {
-        this.IDreceiver = receiver;
-        this.IDsender = "";
+        this.IDreceiver = receiver;     //valeur all -> pour tous sinon pour une personne spécifique
+        this.IDsender = "";             //id de la socket d'origine
         this.title = title;
         this.type = type;
         this.data = content;
-        this.socket = "";
-    }
-
-    setSocket(socket)
-    {
-        this.socket = socket; 
+        this.socketObj = socketObj;
     }
 
     emit()
@@ -198,6 +177,6 @@ class MessageToEmit {
         let message = {};
         message.type = this.type;
         message.data = this.data;
-        this.socket.emit(this.title, message);
+        this.socketObj.socket.emit(this.title, message);
     }
 }

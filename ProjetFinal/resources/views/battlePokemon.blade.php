@@ -3,29 +3,12 @@
   <link rel = "stylesheet" type = "text/css" href = "{{asset('css/battle/main.css')}}" />
   <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js" integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI" crossorigin="anonymous"></script>
-  <script type = "text/javascript" src = "{{asset('js/battle/main.js')}}"></script>
+  <script type = "text/javascript" src = "{{asset('js/battle/variables.js')}}"></script>
+  <script type = "text/javascript" src = "{{asset('js/battle/mainv2.js')}}"></script>
 </head>
 
-<h1>Info débug temp </h1>
+<h1>Battle pokémon </h1>
 
-
-<!--
-<h2>Pokemon Joueur</h2>
-<ul>
-  <li>Name : {{$pokemonPlayer->name}}</li>
-  <li>Energy : {{$pokemonPlayer->energy->name}}</li>
-  <li>Icon energy : <img src="{{$pokemonPlayer->energy->pathIcon}}"/></li>
-  <li>Hp : {{$pokemonPlayer->pv_max}}</li>
-</ul>
-
-<h2>Pokemon Adversaire </h2>
-<ul>
-  <li>Name : pokemonOpponent name</li>
-  <li>Energy : pokemonOpponent energy name</li>
-  <li>Icon energy : <img src="pokemonOpponent energy pathicon"/></li>
-  <li>Hp : pokemonOpponent pv_max</li>
-</ul>
--->
 <script>
 // On envoie les objets pokemon sous format JSON au fichier js
 let objListePokemonsPlayer = <?php echo $pokemonsPlayer->toJson();?>
@@ -37,7 +20,7 @@ let objPlayer = <?php echo $infoPlayerConnected->toJson();?>
 let playerOnline = false;
 
 setObjPlayer(objPlayer);
-setObjPokemonPlayer(objPokemonPlayer);
+//setObjPokemonPlayer(objPokemonPlayer);
 setObjListePokemonPlayer(objListePokemonsPlayer);
 //setObjPokemonOpponent(objPokemonOpponent);
 
@@ -134,9 +117,9 @@ if("{{$infoPlayerConnected}}" !== null){
       Que doit faire {{$pokemonsPlayer[0]->name}}?
     </div>
     <div class="actions">
-      <button id="attaqueNormale" onclick = "chooseActionPlayerTour('Opponent', 'attaqueNormale')">Attaque normale</button>
-      <button id="attaqueSpeciale" onclick = "chooseActionPlayerTour('Opponent', 'attaqueSpeciale')">Attaque spéciale</button>
-      <button id="defenseSpeciale" onclick = "chooseActionPlayerTour('Opponent', 'defenseSpeciale')">Défense spéciale</button>
+      <button id="attaqueNormale" onclick = "chooseActionPlayerTour('attaqueNormale')">Attaque normale</button>
+      <button id="attaqueSpeciale" onclick = "chooseActionPlayerTour('attaqueSpeciale')">Attaque spéciale</button>
+      <button id="defenseSpeciale" onclick = "chooseActionPlayerTour('defenseSpeciale')">Défense spéciale</button>
     </div>
     <div class = "continue">
       <button id="btnContinue" onclick = "actionContinue()">Continuer</button>
