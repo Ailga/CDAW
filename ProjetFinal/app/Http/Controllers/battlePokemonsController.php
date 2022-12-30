@@ -8,13 +8,16 @@ use App\Models\Pokemon;
 
 class battlePokemonsController extends Controller
 {
-    function do_battle(){
-        /**
-         * TODO 
-         */
+    function do_battle()
+    {
         $infoPlayerConnected = auth()->user();
-        //$pokemonPlayer2 = Pokemon::where('name',$namePokemonPlayer)->first();
         $pokemonsPlayer = Pokemon::inRandomOrder()->limit(3)->get(); //On choisi un pokemon au hasard
-        return view('battlePokemon', ['pokemonsPlayer' => $pokemonsPlayer, 'infoPlayerConnected' => $infoPlayerConnected]);
+        return view('battle/main', ['pokemonsPlayer' => $pokemonsPlayer, 'infoPlayerConnected' => $infoPlayerConnected]);
+    }
+
+    function battle_end($request)
+    {
+        $requestData = $request->all();
+        echo "test battle end = " . $requestData;
     }
 }

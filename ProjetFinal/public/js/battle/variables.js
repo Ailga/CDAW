@@ -74,6 +74,8 @@ class Player {
         this.profile.name = jsonPlayer.name;
         this.profile.level = jsonPlayer.level;
         this.profile.imgProfil = jsonPlayer.profile_photo_path;
+        this.profile.battleWon = jsonPlayer.battle_won;
+        this.profile.battleLost = jsonPlayer.battle_lost;
     }
 
     setListePokemonFromJson(jsonListePokemon){
