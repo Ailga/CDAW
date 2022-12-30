@@ -127,8 +127,9 @@ if("{{$infoPlayerConnected}}" !== null){
   </div>
 </div>
 <div class="ecranDroiteJeu">
-  <h2>Mode combat : XXXX </h2>
+  <h2>Mode combat : Choix aléatoire + tour par tour </h2>
   <div class="boxNotificationCombat">
+  <h2 id="Score">Score 0 - 0</h2>
     <div id="infoPlayer">
       <h2>Player</h2>
       <div id="statutPlayer">
@@ -169,6 +170,13 @@ if("{{$infoPlayerConnected}}" !== null){
       <div id="level">
         Level : XXXXX
       </div>
+    </div>
+
+      
+    <div id="Time">
+      <h2> </h2>
+      Total time : <div id="TotalTime">1 min</div>
+      Tour time : <div id="TourTime">10 sec</div>
     </div>
   </div>
 </div>  

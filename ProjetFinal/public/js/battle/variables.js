@@ -148,9 +148,6 @@ class Battle {
         this.opponent = player;
     }
 
-    setWinner(player){
-        this.winner = player;
-    }
 }
 
 class Socket {

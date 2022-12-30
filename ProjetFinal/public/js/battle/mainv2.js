@@ -211,29 +211,44 @@ function pokemonPlayerDied()
 {
     let actualPokemonName = player.listePokemons.data[player.listePokemons.index].name;
     player.listePokemons.index ++;
-    checkIfAllPokemonDied();
-    let newPokemon = player.listePokemons.data[player.listePokemons.index];
-    debugMsg = new DebugMsg(3, "DEBUG", "Votre pokemon " + actualPokemonName + " est mort !\n\nNouveau pokémon = " + newPokemon.name, "alerte");
-    $(".player")[0].children[0].children.name.innerText = newPokemon.name;
-    $(".player")[0].children[0].children.level.innerText = newPokemon.level;
-    $(".player")[0].children[0].children[0].children.myHP.innerText = " " + newPokemon.hp;
-    $("#pokemonPlayerImg").attr('src', newPokemon.pathImg);
-    $("#message")[0].innerText = "Que doit faire " + player.listePokemons.data[player.listePokemons.index].name + " ?";
-    msgSocket = new MessageToEmit("all", 'sendDataToOpponent', "pokemonDied", newPokemon, socketPlayer);
-    msgSocket.emit();
+    let isPokemonDied = checkIfAllPokemonDied();
+    if(! isPokemonDied)
+    {
+        let newPokemon = player.listePokemons.data[player.listePokemons.index];
+        debugMsg = new DebugMsg(3, "DEBUG", "Votre pokemon " + actualPokemonName + " est mort !\n\nNouveau pokémon = " + newPokemon.name, "alerte");
+        $(".player")[0].children[0].children.name.innerText = newPokemon.name;
+        $(".player")[0].children[0].children.level.innerText = newPokemon.level;
+        $(".player")[0].children[0].children[0].children.myHP.innerText = " " + newPokemon.hp;
+        $("#pokemonPlayerImg").attr('src', newPokemon.pathImg);
+        $("#message")[0].innerText = "Que doit faire " + player.listePokemons.data[player.listePokemons.index].name + " ?";
+        msgSocket = new MessageToEmit("all", 'sendDataToOpponent', "pokemonDied", newPokemon, socketPlayer);
+        msgSocket.emit();
+    }
+    else{
+        debugMsg = new DebugMsg(3, "DEBUG", "Fin du combat", "console");
+    }
+    
 }
 
 function checkIfAllPokemonDied()
 {
-    if(opponent.listePokemons.index > 1)
+    if(opponent.listePokemons.index > 0)
     {
         debugMsg = new DebugMsg(3, "DEBUG", "Opponent a perdu, tous ses pokémons sont morts", "alerte");
         playerWin(player, opponent);
+        return true;
     }
-    if(player.listePokemons.index > 1)
+    if(player.listePokemons.index > 0)
     {
         debugMsg = new DebugMsg(3, "DEBUG", "Vous avez perdu, tous vos pokémons sont morts", "alerte");
+        msgSocket = new MessageToEmit("all", "sendDataToOpponent", "playerWin", "None", socketPlayer);
+        msgSocket.emit();
         playerLoose(opponent, player);
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
 
@@ -246,22 +261,28 @@ function playerWin(winner, looser)
     {
         debugMsg = new DebugMsg(3, "DEBUG", "C'est votre " + winner.profile.battleWon + " battle gagné, vous augmentez de 1 niveau !", "alerte");
         winner.profile.level ++;
+        
+    }
 
-        $.post('/battle/end',
+    $.post('/battle/end',
         {
             data: "test"
         })
-    }
 }
 
 function playerLoose(winner, looser)
 {
-    debugMsg = new DebugMsg(3, "DEBUG", "Vous êtes nul, vous avez perdu face à " + winner.profile.name);
+    debugMsg = new DebugMsg(3, "DEBUG", "Vous êtes nul, vous avez perdu face à " + winner.profile.name, "alerte");
 }
 
 
 socketPlayer.socket.on('sendDataToPlayer', (message) => {
-    if(message.type == "pokemonDied")
+    if(message.type == "playerWin")
+    {
+        opponent.listePokemons.index  = 3;
+        checkIfAllPokemonDied();
+    }
+    else if(message.type == "pokemonDied")
     {
         let newPokemon = message.data;
         debugMsg = new DebugMsg(3, "DEBUG", "Le pokemon de l'adversaire : " + battle.opponent.listePokemons.data[opponent.listePokemons.index].name + " est mort, nouveau pokémon : " + newPokemon.name, "alerte");

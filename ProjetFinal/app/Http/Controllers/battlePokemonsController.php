@@ -19,5 +19,7 @@ class battlePokemonsController extends Controller
     {
         $requestData = $request->all();
         echo "test battle end = " . $requestData;
+        echo "<script>console.log('ceci est un test');</script>";
+        return view('battle/end');
     }
 }

@@ -36,6 +36,10 @@ Route::get('/liste', 'listePokemonsController@affiche_bestiaire');
 
 Route::post('/battle/end', 'battlePokemonsController@battle_end');
 
+Route::get('/battle/end', function () {
+    return view('battle/end');
+});
+
 
 Route::get('/user/{name}','UserController@affiche_userEnergy');
 
