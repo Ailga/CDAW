@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\battlePokemonsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,20 +27,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    //Route::get('/battle/{namePokemonPlayer}/{namePokemonOpponent}', 'battlePokemonsController@do_battle');
-    //Route::get('/battle/{namePokemonPlayer}', 'battlePokemonsController@do_battle');
     Route::get('/battle', 'battlePokemonsController@do_battle');
+    
 });
+
+Route::post('/battle/main', 'battlePokemonsController@battle_end_post');
+Route::get('/battle/end', 'battlePokemonsController@battle_end_get');
 
 Route::get('/liste', 'listePokemonsController@affiche_bestiaire');
-
-
-Route::post('/battle/end', 'battlePokemonsController@battle_end');
-
-Route::get('/battle/end', function () {
-    return view('battle/end');
-});
-
 
 Route::get('/user/{name}','UserController@affiche_userEnergy');
 

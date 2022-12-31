@@ -5,6 +5,7 @@
   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js" integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI" crossorigin="anonymous"></script>
   <script type = "text/javascript" src = "{{asset('js/battle/variables.js')}}"></script>
   <script type = "text/javascript" src = "{{asset('js/battle/mainv2.js')}}"></script>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <h1>Battle pokémon </h1>

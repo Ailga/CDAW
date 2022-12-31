@@ -264,10 +264,25 @@ function playerWin(winner, looser)
         
     }
 
-    $.post('/battle/end',
-        {
-            data: "test"
-        })
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    json = {name: 'test', color: 'red'};
+
+    console.log("avant post");
+    $.post({
+        url: '/battle/main', 
+        data: json,
+        dateType: 'json',
+        success: function(data){
+            console.log(data);
+        },
+    })
+
+    console.log("apres post");
 }
 
 function playerLoose(winner, looser)

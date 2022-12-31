@@ -5,21 +5,29 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Pokemon;
+use App\Models\User;
+use App\Http\Requests\TestRequest;
 
 class battlePokemonsController extends Controller
 {
-    function do_battle()
+    public function do_battle()
     {
         $infoPlayerConnected = auth()->user();
         $pokemonsPlayer = Pokemon::inRandomOrder()->limit(3)->get(); //On choisi un pokemon au hasard
         return view('battle/main', ['pokemonsPlayer' => $pokemonsPlayer, 'infoPlayerConnected' => $infoPlayerConnected]);
     }
 
-    function battle_end($request)
+    public function battle_end_post(TestRequest $profilUpdate)
     {
-        $requestData = $request->all();
-        echo "test battle end = " . $requestData;
-        echo "<script>console.log('ceci est un test');</script>";
+        //$profilUpdate->user()->fill($profilUpdate->validated());
+        //$profilUpdate->user()->save();
+        echo "dans controller";
+        //echo "test battle end = " . print_r($profilUpdate);
+        //return $profilUpdate;
+    }
+
+    public function battle_end_get()
+    {
         return view('battle/end');
     }
 }
