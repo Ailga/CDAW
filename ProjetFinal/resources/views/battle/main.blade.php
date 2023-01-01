@@ -176,8 +176,8 @@ if("{{$infoPlayerConnected}}" !== null){
       
     <div id="Time">
       <h2> </h2>
-      Total time : <div id="TotalTime">1 min</div>
-      Tour time : <div id="TourTime">10 sec</div>
+      Total time : <div id="TotalTime"> </div>
+      Tour time : <div id="TourTime"> </div>
     </div>
   </div>
 </div>  

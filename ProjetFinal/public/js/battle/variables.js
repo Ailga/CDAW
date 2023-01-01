@@ -99,6 +99,42 @@ class Player {
     }
 }
 
+class Chrono{
+    constructor(){
+        this.textElementID = "";
+        this.duree = 0;
+        this.id = 0;
+    }
+
+    startChronometer = () => {
+        let startTime;
+        let currentTime;
+        let elapsedTime = 0;
+        startTime = Date.now();
+        this.id = setInterval(() => {
+            currentTime = Date.now();
+            elapsedTime = Math.floor((currentTime - startTime) / 1000);
+            this.duree = elapsedTime;
+            if(this.textElementID != ""){
+                if(elapsedTime < 60){
+                    document.getElementById(this.textElementID).innerHTML = "0:" + elapsedTime;
+                }else{
+                    let minutes = Math.floor(elapsedTime / 60);
+                    let seconds = elapsedTime % 60;
+                    document.getElementById(this.textElementID).innerHTML = minutes + ":" + seconds;
+                }
+            }
+            
+        }, 1000);
+
+    }
+
+    stopChronometer(){
+        clearInterval(this.id);
+    }
+
+}
+
 class ActionTour {
     constructor() {
         this.type = "";
@@ -108,20 +144,20 @@ class ActionTour {
 }
 
 class Tour {
+
     constructor(){
-        this.duree = 0;
+        this.chrono = new Chrono();
+        this.intervalId = 0;
         this.player = {};
         this.player.action = new ActionTour();
         this.player.status = "objectCreated";
         this.player.pokemon = new Pokemon();
+        this.player.chrono = new Chrono();
         this.opponent = {};
         this.opponent.action = new ActionTour();
         this.opponent.pokemon = new Pokemon();
         this.opponent.status = "objectCreated";
-    }
-
-    setDuree(dureeEnSec){
-        this.duree = dureeEnSec;
+        this.opponent.chrono = new Chrono();
     }
 }
 
@@ -129,15 +165,11 @@ class Battle {
     constructor(player, opponent){
         this.player = player;
         this.opponent = opponent;
-        this.duree = 0;
+        this.chrono = new Chrono();
         this.tour = {};
         this.indexTour = 0;
         this.tour[0] = new Tour();
         this.score = [0,0];             // Format [scorePlayer, scoreOpponent]
-    }
-
-    setDuree(dureeEnSec){
-        this.duree = dureeEnSec;
     }
 
     setPlayer(player){

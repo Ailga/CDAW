@@ -82,10 +82,20 @@ function launchBattleScreen()
     $("#pokemonOpponentImg").attr('src', pokemonOpponent.pathImg);
     $(".ecranGaucheJeu").css("display", "inline");
     $(".ecranDroiteJeu").css("display", "inline");
+
+    //On start les chronos
+    battle.chrono.textElementID = "TotalTime";
+    battle.tour[battle.indexTour].player.chrono.textElementID = "TourTime";
+    battle.chrono.startChronometer();
+    battle.tour[battle.indexTour].chrono.startChronometer();
+    battle.tour[battle.indexTour].player.chrono.startChronometer();
 }
 
 function resetStateBtnAndPlayer()
 {
+    battle.tour[battle.indexTour].chrono.startChronometer();
+    battle.tour[battle.indexTour].player.chrono.startChronometer();
+    
     player.status = "NOK";
     opponent.status = "NOK";
 
@@ -153,6 +163,7 @@ function prepareAction()
 
 function actionContinue()
 {
+    battle.tour[battle.indexTour].player.chrono.stopChronometer();
     $("#message")[0].innerText = "En attente du joueur 2 ...";
     $("#btnContinue").addClass("btnClicked");
     battle.tour[battle.indexTour].player.status = "OK";
@@ -201,7 +212,8 @@ function doAttackv2()
     battle.tour[battle.indexTour].player.action.opponentHP = battle.tour[battle.indexTour].opponent.pokemon.hp;
     msgSocket = new MessageToEmit("all", 'sendDataToOpponent', "action", battle.tour[battle.indexTour].player.action, socketPlayer);
     msgSocket.emit();
-    //debugMsg = new DebugMsg(1, "DEBUG", "Info battle du tour n°" + battle.indexTour + " = " + JSON.stringify(battle.tour[battle.indexTour]), "console");
+    
+    battle.tour[battle.indexTour].chrono.stopChronometer();
     battle.tour[battle.indexTour + 1] = {};
     battle.tour[battle.indexTour + 1] = battle.tour[battle.indexTour];
     battle.indexTour ++;
@@ -234,6 +246,7 @@ function checkIfAllPokemonDied()
 {
     if(opponent.listePokemons.index > 0)
     {
+        battle.chrono.stopChronometer();
         debugMsg = new DebugMsg(3, "DEBUG", "Opponent a perdu, tous ses pokémons sont morts", "alerte");
         playerWin(player, opponent);
         return true;
