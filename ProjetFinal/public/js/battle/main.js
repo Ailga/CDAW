@@ -1,306 +1,442 @@
-var player = {};
-var opponent = {};
-var tourBattle = {};      //Contient info joueur par tour
-var listePokemonPlayer = {};  //Contient les 3 pokemons du player
-var listePokemonOpponent = {};  //Contient les 3 pokemons de l'opponent
-var battle = {};
-battle.tour = {};         //Contient tous les info de tous les tours
-
-let ip_address = "127.0.0.1";
-let socket_port = '3000';
-let socket = io(ip_address + ':' + socket_port);
+var player = new Player();
+var opponent = new Player();
+var battle = new Battle(player, opponent);
+var socketPlayer = new Socket();
+var msgSocket = new MessageToEmit();
+var debugMsg = new DebugMsg();
 
 
-
-
-function setObjPlayer(jsonPlayer){
-  player.profile = {}
-  player.profile.id = jsonPlayer.id;
-  player.profile.name = jsonPlayer.name;
-  player.profile.level = jsonPlayer.level;
-  player.profile.imgProfil = jsonPlayer.profile_photo_path;
-  opponent.profile = {};
-  
+function setObjPlayer(jsonPlayer)
+{
+    player.setProfilFromJson(jsonPlayer);
 }
 
-function setObjListePokemonPlayer(jsonListePokemon){
-  console.log("Liste pokemon player set = " + JSON.stringify(jsonListePokemon));
-  listePokemonPlayer.index = 0;
-  listePokemonPlayer.data = jsonListePokemon;
-  recherchePlayer();
+function setObjListePokemonPlayer(jsonListePokemon)
+{
+    player.setListePokemonFromJson(jsonListePokemon);
+    debugMsg = new DebugMsg(1, "DEBUG", "Liste pokemon set : " + JSON.stringify(jsonListePokemon), "console");
+    recherchePlayer();
 }
 
-function setObjListePokemonOpponent(jsonListePokemon){
-  console.log("Liste pokemon opponent set = " + JSON.stringify(jsonListePokemon));
-  listePokemonOpponent = jsonListePokemon;
+function recherchePlayer()
+{
+    player.setStatus("recherchePlayer");
+    debugMsg = new DebugMsg(2, "DEBUG", "Recherche d'un joueur en cours...", "console");
+    msgSocket = new MessageToEmit("all", "sendDataToOpponent", "recherchePlayer", player, socketPlayer);
+    msgSocket.emit();
 }
 
-function setObjPokemonPlayer(jsonPokemon){
-  tourBattle.player = {};
-  player.pokemon = {}
-  player.pokemon = jsonPokemon;
-  player.pokemon.hp = player.pokemon.pv_max;
-  player.pokemon.availableNormalAttack = false;
-  player.pokemon.availableSpecialAttack = false;
-  player.pokemon.availableSpecialDefense = false;
-  tourBattle.player.pokemon = player.pokemon;
-  console.log("obj pokemon player set ! pokemon : " + player.pokemon.name);
-}
-
-function setObjPokemonOpponent(jsonPokemon){
-  opponent.status = "NOK";
-  opponent.pokemon = {};
-  opponent.pokemon = jsonPokemon;
-  opponent.pokemon.hp = opponent.pokemon.pv_max;
-  opponent.pokemon.availableNormalAttack = false;
-  opponent.pokemon.availableSpecialAttack = false; 
-  opponent.pokemon.availableSpecialDefense = false;
-  console.log("obj pokemon opponent set ! pokemon : " + opponent.pokemon.name);
-}
-
-function recherchePlayer(){
-  console.log("Recherche d'un joueur en cours ...");
-  let message = {};
-  message.type = "recherchePlayer";
-  player.listePokemon = listePokemonPlayer;
-  message.infoPlayer = player;
-  player.status = "recherchePlayer";
-  socket.emit('sendDataToOpponent', message);
-}
-
-function notifyMessage(whichPlayer, message){
-  console.log("Notification : " + " Pour  " + whichPlayer + ", message : " + message);
-  $("#info" + whichPlayer)[0].children.notification.innerText = message;
-}
-
-function setSearchPageAfterOpponentFound(opponent){
-  if(opponent.profile.imgProfil == null){
-    opponent.profile.imgProfil = "/img/battle/imgPhotoProfil.jpg";
-  }
-
-  $(".imgPlayerDroite").attr('src', opponent.profile.imgProfil);
-  $(".playerDroite .namePlayer").html(opponent.profile.name + "<br>Level " + opponent.profile.level);
-  $(".imgSearch").css("display", "none");
-  $(".imgVS").css("display", "initial");
-
-  $(".messageLancementCombat").css("display", "initial");
-  var secRestante = 5;
-  function showMsgLaunchBattle(){
-    $(".messageLancementCombat").text("Lancement dans " + secRestante);
-    fadeOutLaunchMsg();
-    window.setTimeout(fadeInLaunchMsg, 500);
-    if(secRestante == 0){
-      window.clearInterval(timerBeforeLaunch);
-      console.log("Lancement de la battle ...")
-      $(".messageLancementCombat").text("Lancement en cours...");
-      //console.log("Info battle possédée : " + JSON.stringify(battle));
-      launchBattleScreen();
+function setSearchPageAfterOpponentFound()
+{
+    if(opponent.profile.imgProfil == null)
+    {
+        opponent.profile.imgProfil = "/img/battle/imgPhotoProfil.jpg";
     }
-    secRestante --;
-  }
+    $(".imgPlayerDroite").attr('src', opponent.profile.imgProfil);
+    $(".playerDroite .namePlayer").html(opponent.profile.name + "<br>Level " + opponent.profile.level);
+    $(".imgSearch").css("display", "none");
+    $(".imgVS").css("display", "initial");
 
-  function fadeInLaunchMsg(){
-    $(".messageLancementCombat").css("opacity", "1");
-  }
+    $(".messageLancementCombat").css("display", "initial");
+    var secRestante = 5;
 
-  function fadeOutLaunchMsg(){
-    $(".messageLancementCombat").css("opacity", "0");
-  }
-
-  var timerBeforeLaunch = window.setInterval(showMsgLaunchBattle, 1000);
-  
-}
-
-function launchBattleScreen(){
-  $(".ecranRecherchePlayers").css("display", "none");
-  $(".opponent")[0].children[0].children[0].children.apHP.innerText = battle.opponent.pokemon.hp;
-  $(".opponent")[0].children[0].children.pokemonOpponentName.innerText = battle.opponent.pokemon.name;
-  $(".opponent")[0].children[0].children.pokemonOpponentLevel.innerText = " " + battle.opponent.pokemon.level;
-  $("#infoOpponent")[0].children.statutOpponent.innerText = "Status : Online ✅"
-  $("#infoOpponent #statutOpponent").css("color", "green");
-  $("#infoOpponent")[0].children.name.innerText = "Name : " + battle.opponent.profile.name;
-  $("#infoOpponent")[0].children.level.innerText = "Level : " + battle.opponent.profile.level;
-
-  $("#pokemonOpponentImg").attr('src', battle.opponent.pokemon.pathImg);
-  $(".ecranGaucheJeu").css("display", "inline");
-  $(".ecranDroiteJeu").css("display", "inline");
-  battle.indexTour = 0;    //Correspond au premier tour de la battle
-  battle.tour[0] = {};
-  battle.tour[0].player = player;
-  battle.tour[0].opponent = battle.opponent;
-}
-
-function resetStateBtnAndPlayer(){
-  player.status = "NOK";
-  opponent.status = "NOK";
-
-  $("#attaqueSpeciale").removeClass("btnClicked");
-  $("#defenseSpeciale").removeClass("btnClicked");
-  $("#attaqueNormale").removeClass("btnClicked");
-  $("#attaqueSpeciale").removeClass("btnDisabled");
-  $("#defenseSpeciale").removeClass("btnDisabled");
-  $("#attaqueNormale").removeClass("btnDisabled");
-  $("#btnContinue").removeClass("btnClicked");
-  $("#btnContinue").removeClass("btnEnabled");
-
-  if(player.pokemon.availableSpecialAttack){
-    $("#attaqueSpeciale").addClass("btnDisabled");
-  }
-  if(player.pokemon.availableSpecialDefense){
-    $("#defenseSpeciale").addClass("btnDisabled");
-  }
-  
-  $("#message")[0].innerText = "Que doit faire " + player.pokemon.name + " ?";
-  $("#infoPlayer")[0].children.statutCombat.innerText = "État : Pas prêt";
-  $("#infoPlayer #statutCombat").css("color", "red");
-  $("#infoOpponent")[0].children.statutCombat.innerText = "État : Pas prêt";
-  $("#infoOpponent #statutCombat").css("color", "red");
-
-}
-
-function chooseActionPlayerTour(whichPlayer, typeAttack){
-  let actionPlayer = {};
-  console.log("fonction chooseActionPlayerTour appelée avec param : " + typeAttack);
-  player.pokemon.actionTour = typeAttack;
-  if(typeAttack == "attaqueNormale"){
-    actionPlayer.score = player.pokemon.scoreNormalAttack;
-    $("#attaqueSpeciale").addClass("btnDisabled");
-    $("#defenseSpeciale").addClass("btnDisabled");
-    //doAttack(whichPlayer, typeAttack);
-  }else if(typeAttack == "attaqueSpeciale" && ! player.pokemon.availableSpecialAttack){
-    player.pokemon.availableSpecialAttack = true;
-    actionPlayer.score = player.pokemon.scoreSpecialAttack;
-    $("#defenseSpeciale").addClass("btnDisabled");
-    $("#attaqueNormale").addClass("btnDisabled");
-    //doAttack(whichPlayer, typeAttack);
-  }else if(typeAttack == "defenseSpeciale" && ! player.pokemon.availableSpecialDefense){
-    player.pokemon.availableSpecialDefense = true;
-    actionPlayer.score = player.pokemon.scoreSpecialDefense;
-    $("#attaqueSpeciale").addClass("btnDisabled");
-    $("#attaqueNormale").addClass("btnDisabled");
-  }
-  actionPlayer.type = typeAttack;
-  prepareAction(actionPlayer);
-  $("#" + typeAttack).addClass("btnClicked");
-}
-
-function prepareAction(actionPlayer){
-  tourBattle.player.action = actionPlayer;
-  player.action = actionPlayer;
-  $("#message")[0].innerText = "Cliquez sur continuer";
-  $("#btnContinue").addClass("btnEnabled");
-}
-
-function actionContinue(){
-  $("#message")[0].innerText = "En attente du joueur 2 ...";
-  $("#btnContinue").addClass("btnClicked");
-  tourBattle.player.status = "OK";
-  player.status = "OK";
-  $("#infoPlayer")[0].children.statutCombat.innerText = "État : Prêt";
-  $("#infoPlayer #statutCombat").css("color", "green");
-  let message = {};
-  message.type = "infoBattle";
-  message.infoBattle = tourBattle;
-  socket.emit('sendDataToOpponent', message);
-  checkIfBothPlayersAreOk();
-}
-
-function checkIfBothPlayersAreOk(){
-  if((player.status == "OK") && (opponent.status == "OK")){
-    console.log("tous les players sont OK");
-    doAttackv2(tourBattle.player.action);
-    resetStateBtnAndPlayer();
-  }else{
-    console.log("encore un player non ok => player : " + player.status + " opponent : " + opponent.status);
-  }
-}
-
-function doAttackv2(actionPlayer){
-  let message = {};
-  message.type = "action";
-  message.actionPlayer = actionPlayer;
-  //console.log("Var battle = " + JSON.stringify(battle));
-  battle.tour[battle.indexTour].opponent.action = opponent.action;
-  if(opponent.action.type == "defenseSpeciale"){
-    if(player.action.type == "defenseSpeciale"){
-      console.log("Chacun c'est défendu, aucun dégat reçus");
-    }else{
-      battle.tour[battle.indexTour].opponent.pokemon.hp = battle.tour[battle.indexTour].opponent.pokemon.hp - Math.abs(battle.tour[battle.indexTour].opponent.action.score - player.action.score)
+    function showMsgLaunchBattle()
+    {
+        $(".messageLancementCombat").text("Lancement dans " + secRestante);
+        fadeOutLaunchMsg();
+        window.setTimeout(fadeInLaunchMsg, 500);
+        if(secRestante == 0)
+        {
+            window.clearInterval(timerBeforeLaunch);
+            debugMsg = new DebugMsg(3, "DEBUG", "Lancement de la battle", "console");
+            $(".messageLancementCombat").text("Lancement en cours...");
+            launchBattleScreen();
+        }
+        secRestante --;
     }
-  }else{
-    battle.tour[battle.indexTour].opponent.pokemon.hp = battle.tour[battle.indexTour].opponent.pokemon.hp - message.actionPlayer.score;
-  }
-  $(".opponent")[0].children[0].children[0].children.apHP.innerText = battle.tour[battle.indexTour].opponent.pokemon.hp;
-  message.opponentHp = battle.tour[battle.indexTour].opponent.pokemon.hp;
-  socket.emit('sendDataToOpponent', message);
-  console.log("Info battle du tour " + battle.indexTour + " = " + JSON.stringify(battle.tour[battle.indexTour]));
-  battle.tour[battle.indexTour + 1] = {};
-  battle.tour[battle.indexTour + 1] = battle.tour[battle.indexTour];
-  battle.indexTour ++;
+
+    function fadeInLaunchMsg()
+    {
+        $(".messageLancementCombat").css("opacity", "1");
+    }
+
+    function fadeOutLaunchMsg()
+    {
+        $(".messageLancementCombat").css("opacity", "0");
+    }
+
+    let timerBeforeLaunch = window.setInterval(showMsgLaunchBattle, 1000);    
 }
 
-function pokemonDied(pokemonJustDied, listPokemon){
-  listPokemon.index ++;
-  player.pokemon = listPokemon.data[listPokemon.index];
-  alert("Votre pokemon " + pokemonJustDied.name + " est mort !\n\n" + "Nouveau pokémon = " + player.pokemon.name);
+function launchBattleScreen()
+{
+    $(".ecranRecherchePlayers").css("display", "none");
+    let pokemonOpponent = battle.opponent.listePokemons.data[opponent.listePokemons.index]
+    $(".opponent")[0].children[0].children[0].children.apHP.innerText = pokemonOpponent.hp;
+    $(".opponent")[0].children[0].children.pokemonOpponentName.innerText = pokemonOpponent.name;
+    $(".opponent")[0].children[0].children.pokemonOpponentLevel.innerText = " " + pokemonOpponent.level;
+    $("#infoOpponent")[0].children.statutOpponent.innerText = "Status : Online ✅"
+    $("#infoOpponent #statutOpponent").css("color", "green");
+    $("#infoOpponent")[0].children.name.innerText = "Name : " + battle.opponent.profile.name;
+    $("#infoOpponent")[0].children.level.innerText = "Level : " + battle.opponent.profile.level;
+    $("#pokemonOpponentImg").attr('src', pokemonOpponent.pathImg);
+    $(".ecranGaucheJeu").css("display", "inline");
+    $(".ecranDroiteJeu").css("display", "inline");
 
+    //On start les chronos
+    battle.chrono.textElementID = "TotalTime";
+    battle.tour[battle.indexTour].player.chrono.textElementID = "TourTime";
+    battle.chrono.startChronometer();
+    battle.tour[battle.indexTour].chrono.startChronometer();
+    battle.tour[battle.indexTour].player.chrono.startChronometer();
 }
 
-
-socket.on('sendDataToPlayer', (message) => {
-  if(message.type == "action"){
-    opponent.action = message.action;
-    player.pokemon.hp = message.opponentHp;
-    $(".player")[0].children[0].children[0].children.myHP.innerText = player.pokemon.hp;
-    if(player.pokemon.hp <=0){
-      pokemonDied(player.pokemon, player.listePokemon);
-      //alert("Votre pokemon " + player.pokemon.name + " est mort !");
-    }
-  }else if(message.type == "infoBattle"){
-    if(message.infoBattle.player.status == 'OK'){
-      console.log("Opponent ready");
-      opponent.status = "OK";
-      opponent.action = message.infoBattle.player.action;
-      $("#infoOpponent")[0].children.statutCombat.innerText = "État : Prêt";
-      $("#infoOpponent #statutCombat").css("color", "green");
-      checkIfBothPlayersAreOk();
-    }else{
-      opponent.status = "NOK";
-    }
-  }else if(message.type == "recherchePlayer"){
-    console.log("Opponent " + message.infoPlayer.profile.name + " recherche quelqu'un.");
-    if(player.status == "recherchePlayer"){
-      opponent = message.infoPlayer;
-      player.status = "NOK";
-      opponent.status = "NOK";
-      console.log("Les 2 joueurs " + player.profile.name + " et " + opponent.profile.name + " sont dispos pour un combat");
-      battle.player = player;
-      battle.player.IDsocket = socket.id;
-      battle.opponent = opponent;
-      battle.opponent.IDsocket = message.sourceSocketID;
-      battle.score = [0, 0];      // Format [scorePlayer, scoreOpponent]
-
-      let messageTmp = {};
-      messageTmp.type = "playerFound";
-      messageTmp.content = battle;
-      socket.emit('sendDataToOpponent', messageTmp);
-      
-      setSearchPageAfterOpponentFound(battle.opponent);
-
-    }else{
-      console.log("Opponent " + message.infoPlayer.profile.name + " prêt mais pas le player");
-    }
-  }else if(message.type == "playerFound"){
+function resetStateBtnAndPlayer()
+{
+    battle.tour[battle.indexTour].chrono.startChronometer();
+    battle.tour[battle.indexTour].player.chrono.startChronometer();
+    
     player.status = "NOK";
     opponent.status = "NOK";
-    // Les 2 savent qu'ils sont OK pour combattre ensemble
-    battle.opponent = message.content.player;
-    battle.player = player;
-    battle.player.IDsocket = socket.id;
-    battle.score = [0, 0];
-    console.log("Les 2 players savent qu'ils peuvent combattre ensemble");
-    
-    setSearchPageAfterOpponentFound(battle.opponent);
-  }
-});
 
+    $("#attaqueSpeciale").removeClass("btnClicked");
+    $("#defenseSpeciale").removeClass("btnClicked");
+    $("#attaqueNormale").removeClass("btnClicked");
+    $("#attaqueSpeciale").removeClass("btnDisabled");
+    $("#defenseSpeciale").removeClass("btnDisabled");
+    $("#attaqueNormale").removeClass("btnDisabled");
+    $("#btnContinue").removeClass("btnClicked");
+    $("#btnContinue").removeClass("btnEnabled");
+
+    if(player.listePokemons.data[player.listePokemons.index].availableSpecialAttack){
+        $("#attaqueSpeciale").addClass("btnDisabled");
+    }
+    if(player.listePokemons.data[player.listePokemons.index].availableSpecialDefense){
+        $("#defenseSpeciale").addClass("btnDisabled");
+    }
+
+    $("#message")[0].innerText = "Que doit faire " + player.listePokemons.data[player.listePokemons.index].name + " ?";
+    $("#infoPlayer")[0].children.statutCombat.innerText = "État : Pas prêt";
+    $("#infoPlayer #statutCombat").css("color", "red");
+    $("#infoOpponent")[0].children.statutCombat.innerText = "État : Pas prêt";
+    $("#infoOpponent #statutCombat").css("color", "red");
+}
+
+function chooseActionPlayerTour(typeAttack)
+{
+    debugMsg = new DebugMsg(1, "DEBUG", "Action choisie = " + typeAttack);
+    let tmpScoreAttack = 0;
+    let playerPokemon = player.listePokemons.data[player.listePokemons.index];
+    if(typeAttack == "attaqueNormale")
+    {
+        tmpScoreAttack = playerPokemon.scoreNormalAttack;
+        $("#attaqueSpeciale").addClass("btnDisabled");
+        $("#defenseSpeciale").addClass("btnDisabled");
+        //doAttack(whichPlayer, typeAttack);
+    }
+    else if(typeAttack == "attaqueSpeciale" && ! playerPokemon.availableSpecialAttack)
+    {
+        playerPokemon.availableSpecialAttack = true;
+        tmpScoreAttack = playerPokemon.scoreSpecialAttack;
+        $("#defenseSpeciale").addClass("btnDisabled");
+        $("#attaqueNormale").addClass("btnDisabled");
+        //doAttack(whichPlayer, typeAttack);
+    }
+    else if(typeAttack == "defenseSpeciale" && ! playerPokemon.availableSpecialDefense)
+    {
+        playerPokemon.availableSpecialDefense = true;
+        tmpScoreAttack = playerPokemon.scoreSpecialDefense;
+        $("#attaqueSpeciale").addClass("btnDisabled");
+        $("#attaqueNormale").addClass("btnDisabled");
+    }
+    battle.tour[battle.indexTour].player.action.type = typeAttack;
+    battle.tour[battle.indexTour].player.action.score = tmpScoreAttack;
+    prepareAction();
+    $("#" + typeAttack).addClass("btnClicked");
+}
+
+function prepareAction()
+{
+    $("#message")[0].innerText = "Cliquez sur continuer";
+    $("#btnContinue").addClass("btnEnabled");
+}
+
+function actionContinue()
+{
+    battle.tour[battle.indexTour].player.chrono.stopChronometer();
+    $("#message")[0].innerText = "En attente du joueur 2 ...";
+    $("#btnContinue").addClass("btnClicked");
+    battle.tour[battle.indexTour].player.status = "OK";
+    battle.tour[battle.indexTour].player.pokemon = player.listePokemons.data[player.listePokemons.index];
+    battle.tour[battle.indexTour].opponent.pokemon = opponent.listePokemons.data[opponent.listePokemons.index];
+    player.status = "OK";
+    $("#infoPlayer")[0].children.statutCombat.innerText = "État : Prêt";
+    $("#infoPlayer #statutCombat").css("color", "green");
+    msgSocket = new MessageToEmit("all", "sendDataToOpponent", "infoBattle", battle.tour[battle.indexTour], socketPlayer);
+    msgSocket.emit();
+    checkIfBothPlayersAreOk();
+}
+
+function checkIfBothPlayersAreOk()
+{
+    if((player.status == "OK") && (opponent.status == "OK")){
+        debugMsg = new DebugMsg(3, "DEBUG", "Tous les joueurs sont OK", "console");
+        doAttackv2();
+        resetStateBtnAndPlayer();
+    }else{
+        debugMsg = new DebugMsg(2, "DEBUG", "Encore un joueur non OK => player : " + player.status + " et opponent : " + opponent.status, "console");
+    }
+}
+
+function doAttackv2()
+{
+    if(battle.tour[battle.indexTour].opponent.action.type == "defenseSpeciale")
+    {
+        if(battle.tour[battle.indexTour].player.action.type == "defenseSpeciale")
+        {
+            debugMsg = new DebugMsg(2, "DEBUG", "Chacun a choisi la défense, aucun dégat reçus", "console");
+        }
+        else
+        {
+            battle.tour[battle.indexTour].opponent.pokemon.hp = battle.tour[battle.indexTour].opponent.pokemon.hp - Math.abs(battle.tour[battle.indexTour].opponent.action.score - battle.tour[battle.indexTour].player.action.score);
+        }
+    }
+    else
+    {
+        if(battle.tour[battle.indexTour].player.action.type != "defenseSpeciale")
+        {
+            battle.tour[battle.indexTour].opponent.pokemon.hp = battle.tour[battle.indexTour].opponent.pokemon.hp - battle.tour[battle.indexTour].player.action.score;
+        }
+    }
+    $(".opponent")[0].children[0].children[0].children.apHP.innerText = battle.tour[battle.indexTour].opponent.pokemon.hp;
+    battle.tour[battle.indexTour].player.action.opponentHP = battle.tour[battle.indexTour].opponent.pokemon.hp;
+    msgSocket = new MessageToEmit("all", 'sendDataToOpponent', "action", battle.tour[battle.indexTour].player.action, socketPlayer);
+    msgSocket.emit();
+    
+    battle.tour[battle.indexTour].chrono.stopChronometer();
+    battle.tour[battle.indexTour + 1] = {};
+    battle.tour[battle.indexTour + 1] = battle.tour[battle.indexTour];
+    battle.indexTour ++;
+}
+
+function pokemonPlayerDied()
+{
+    let actualPokemonName = player.listePokemons.data[player.listePokemons.index].name;
+    player.listePokemons.index ++;
+    let isPokemonDied = checkIfAllPokemonDied();
+    if(! isPokemonDied)
+    {
+        let newPokemon = player.listePokemons.data[player.listePokemons.index];
+        debugMsg = new DebugMsg(3, "DEBUG", "Votre pokemon " + actualPokemonName + " est mort !\n\nNouveau pokémon = " + newPokemon.name, "alerte");
+        $(".player")[0].children[0].children.name.innerText = newPokemon.name;
+        $(".player")[0].children[0].children.level.innerText = newPokemon.level;
+        $(".player")[0].children[0].children[0].children.myHP.innerText = " " + newPokemon.hp;
+        $("#pokemonPlayerImg").attr('src', newPokemon.pathImg);
+        $("#message")[0].innerText = "Que doit faire " + player.listePokemons.data[player.listePokemons.index].name + " ?";
+        msgSocket = new MessageToEmit("all", 'sendDataToOpponent', "pokemonDied", newPokemon, socketPlayer);
+        msgSocket.emit();
+    }
+    else{
+        debugMsg = new DebugMsg(3, "DEBUG", "Fin du combat", "console");
+    }
+    
+}
+
+function checkIfAllPokemonDied()
+{
+    if(opponent.listePokemons.index > 0)
+    {
+        battle.chrono.stopChronometer();
+        debugMsg = new DebugMsg(3, "DEBUG", "Opponent a perdu, tous ses pokémons sont morts", "alerte");
+        playerWin(player, opponent);
+        return true;
+    }
+    if(player.listePokemons.index > 0)
+    {
+        debugMsg = new DebugMsg(3, "DEBUG", "Vous avez perdu, tous vos pokémons sont morts", "alerte");
+        msgSocket = new MessageToEmit("all", "sendDataToOpponent", "playerWin", "None", socketPlayer);
+        msgSocket.emit();
+        playerLoose(opponent, player);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
+function playerWin(winner, looser)
+{
+    battle.winner = winner;
+    debugMsg = new DebugMsg(3, "DEBUG", "Félicitations " + winner.profile.name + ", vous avez gagné la battle face à " + looser.profile.name, "alerte");
+    winner.profile.battleWon ++;
+    if(winner.profile.battleWon % 10 == 0)
+    {
+        debugMsg = new DebugMsg(3, "DEBUG", "C'est votre " + winner.profile.battleWon + " battle gagné, vous augmentez de 1 niveau !", "alerte");
+        winner.profile.level ++; 
+    }
+
+    udpateDataPlayerToDB(winner);
+    saveDataBattleToDB();
+}
+
+
+function playerLoose(winner, looser)
+{
+    debugMsg = new DebugMsg(3, "DEBUG", "Vous êtes nul " + looser.profile.name + ", vous avez perdu face à " + winner.profile.name, "alerte");
+    looser.profile.battleLost ++;
+    udpateDataPlayerToDB(looser);
+}
+
+
+function udpateDataPlayerToDB(player)
+{
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    json = {id: player.profile.id, name: player.profile.name, level: player.profile.level, battle_won: player.profile.battleWon, battle_lost: player.profile.battleLost};
+
+    debugMsg = new DebugMsg(2, "DEBUG", "Mise à jour des infos du joueur en cours...", "console");
+    $.ajax({
+        url: '/battle/main', 
+        type: 'POST',
+        data: json,
+        dateType: 'json'
+    })
+    .done(function(data){
+        debugMsg = new DebugMsg(2, "DEBUG", "Mise à jour terminée avec succès : ", "console");
+        console.log(data);
+    })
+    .fail(function (jqXHR, textStatus, errorThrown){
+        debugMsg = new DebugMsg(2, "DEBUG", "Une erreur a été produite lors de la tentative de mise à jour : " + errorThrown, "console");
+    });
+}
+
+
+function saveDataBattleToDB()
+{
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    jsonPokemonJoueur1 = {
+        id1 :battle.player.listePokemons.data[0].id,
+        //id2 :battle.player.listePokemons.data[1].id,
+        //id3 :battle.player.listePokemons.data[2].id
+    }
+    jsonPokemonJoueur2 = {
+        id1 :battle.opponent.listePokemons.data[0].id,
+        //id2 :battle.opponent.listePokemons.data[1].id,
+        //id3 :battle.opponent.listePokemons.data[2].id
+    }
+
+    json = {
+        duration: battle.chrono.duree, 
+        mode: "autoTour", 
+        pokemonJoueur1: jsonPokemonJoueur1, 
+        pokemonJoueur2: jsonPokemonJoueur2, 
+        winner: battle.winner.profile.name, 
+        id_user1: battle.player.profile.id, 
+        id_user2: battle.opponent.profile.id
+    };
+
+    debugMsg = new DebugMsg(2, "DEBUG", "Sauvegarde de la battle en cours...", "console");
+    $.ajax({
+        url: '/battle/save', 
+        type: 'POST',
+        data: json,
+        dateType: 'json'
+    })
+    .done(function(data){
+        debugMsg = new DebugMsg(2, "DEBUG", "Sauvegarde terminée avec succès : ", "console");
+        console.log(data);
+    })
+    .fail(function (jqXHR, textStatus, errorThrown){
+        debugMsg = new DebugMsg(2, "DEBUG", "Une erreur a été produite lors de la tentative de sauvegarde : " + errorThrown, "console");
+    });
+}
+
+
+socketPlayer.socket.on('sendDataToPlayer', (message) => {
+    if(message.type == "playerWin")
+    {
+        opponent.listePokemons.index  = 3;
+        checkIfAllPokemonDied();
+    }
+    else if(message.type == "pokemonDied")
+    {
+        let newPokemon = message.data;
+        debugMsg = new DebugMsg(3, "DEBUG", "Le pokemon de l'adversaire : " + battle.opponent.listePokemons.data[opponent.listePokemons.index].name + " est mort, nouveau pokémon : " + newPokemon.name, "alerte");
+        $(".opponent")[0].children[0].children[0].children.apHP.innerText = newPokemon.hp;
+        $(".opponent")[0].children[0].children.pokemonOpponentName.innerText = newPokemon.name;
+        $(".opponent")[0].children[0].children.pokemonOpponentLevel.innerText = " " + newPokemon.level;
+        $("#pokemonOpponentImg").attr('src', newPokemon.pathImg);
+        opponent.listePokemons.index ++;
+        checkIfAllPokemonDied();
+    }
+    else if(message.type == "action")
+    {
+        battle.tour[battle.indexTour].opponent.action = message.data;
+        player.listePokemons.data[player.listePokemons.index].hp = message.data.opponentHP;
+        $(".player")[0].children[0].children[0].children.myHP.innerText = message.data.opponentHP;
+        if(message.data.opponentHP <=0)
+        {
+            pokemonPlayerDied();
+        }
+    }
+    else if(message.type == "infoBattle")
+    {
+        let dataReceived = message.data;
+        if(dataReceived.player.status == "OK")
+        {
+            opponent.status = "OK";
+            battle.tour[battle.indexTour].opponent.action = dataReceived.player.action;
+            $("#infoOpponent")[0].children.statutCombat.innerText = "État : Prêt";
+            $("#infoOpponent #statutCombat").css("color", "green");
+            checkIfBothPlayersAreOk();
+        }
+        else
+        {
+            opponent.status = "NOK";
+        }
+    }
+    else if(message.type == "recherchePlayer")
+    {
+        debugMsg = new DebugMsg(3, "DEBUG", "Opponent " + message.data.profile.name + " recherche quelqu'un", "console");
+        if(player.status == "recherchePlayer")
+        {
+            opponent = message.data;
+            player.status = "NOK";
+            opponent.status = "NOK";
+            debugMsg = new DebugMsg(2, "DEBUG", "Les 2 joueurs " + player.profile.name + " et " + opponent.profile.name + " peuvent combattre ensemble", "console");
+            battle = new Battle(player, opponent);
+            battle.tour[battle.indexTour].opponent.status = "NOK";
+            battle.tour[battle.indexTour].opponent.pokemon = opponent.listePokemons.data[opponent.listePokemons.index];
+            msgSocket = new MessageToEmit("all", "sendDataToOpponent", "playerFound", battle, socketPlayer);
+            msgSocket.emit();
+            setSearchPageAfterOpponentFound()
+        }
+        else
+        {
+            debugMsg = new DebugMsg(1, "DEBUG", "Opponent " + message.data.profile.name + " en recherche mais pas le player");
+        }
+    }
+    else if(message.type == "playerFound")
+    {
+        player.status = "NOK";
+
+        // Les 2 savent qu'ils sont OK pour combattre ensemble
+        opponent = message.data.player;
+        battle = new Battle(player, opponent);
+        battle.tour[battle.indexTour].opponent.status = "NOK";
+        battle.tour[battle.indexTour].opponent.pokemon = opponent.listePokemons.data[opponent.listePokemons.index];
+        debugMsg = new DebugMsg(3, "DEBUG", "Les 2 joueurs " + player.profile.name + " et " + opponent.profile.name + " savent qu'ils peuvent combattre ensemble", "console");
+        setSearchPageAfterOpponentFound();
+    }
+})

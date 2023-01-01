@@ -28,11 +28,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/battle', 'battlePokemonsController@do_battle');
+    Route::post('/battle/save', 'battlePokemonsController@battle_save');
+    Route::post('/battle/main', 'battlePokemonsController@battle_end_post');
+    Route::get('/battle/end', 'battlePokemonsController@battle_end_get');
     
 });
 
-Route::post('/battle/main', 'battlePokemonsController@battle_end_post');
-Route::get('/battle/end', 'battlePokemonsController@battle_end_get');
 
 Route::get('/liste', 'listePokemonsController@affiche_bestiaire');
 

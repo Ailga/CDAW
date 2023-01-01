@@ -169,7 +169,8 @@ class Battle {
         this.tour = {};
         this.indexTour = 0;
         this.tour[0] = new Tour();
-        this.score = [0,0];             // Format [scorePlayer, scoreOpponent]
+        this.score = [0,0];             // Format [scorePlayer, scoreOpponent] EN DEV
+        this.winner = "";
     }
 
     setPlayer(player){
