@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Pokemon;
 use App\Models\User;
-use App\Http\Requests\TestRequest;
+use App\Http\Requests\UserUpdateRequest;
 
 class battlePokemonsController extends Controller
 {
@@ -17,13 +17,14 @@ class battlePokemonsController extends Controller
         return view('battle/main', ['pokemonsPlayer' => $pokemonsPlayer, 'infoPlayerConnected' => $infoPlayerConnected]);
     }
 
-    public function battle_end_post(TestRequest $profilUpdate)
+    public function battle_end_post(UserUpdateRequest $profilUpdate)
     {
-        //$profilUpdate->user()->fill($profilUpdate->validated());
-        //$profilUpdate->user()->save();
-        echo "dans controller";
-        //echo "test battle end = " . print_r($profilUpdate);
-        //return $profilUpdate;
+        $user = User::find($profilUpdate->get('id'));
+        $user->level = $profilUpdate->get('level');
+        $user->battle_won = $profilUpdate->get('battle_won');
+        $user->battle_lost = $profilUpdate->get('battle_lost');
+        $user->save();
+        return $user;
     }
 
     public function battle_end_get()

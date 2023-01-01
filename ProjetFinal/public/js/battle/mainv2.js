@@ -260,36 +260,46 @@ function playerWin(winner, looser)
     if(winner.profile.battleWon % 10 == 0)
     {
         debugMsg = new DebugMsg(3, "DEBUG", "C'est votre " + winner.profile.battleWon + " battle gagné, vous augmentez de 1 niveau !", "alerte");
-        winner.profile.level ++;
-        
+        winner.profile.level ++; 
     }
 
+    udpateDataPlayerToDB(winner);
+}
+
+
+function playerLoose(winner, looser)
+{
+    debugMsg = new DebugMsg(3, "DEBUG", "Vous êtes nul " + looser.profile.name + ", vous avez perdu face à " + winner.profile.name, "alerte");
+    looser.profile.battleLost ++;
+    udpateDataPlayerToDB(looser);
+}
+
+
+function udpateDataPlayerToDB(player)
+{
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
 
-    json = {name: 'test', color: 'red'};
+    json = {id: player.profile.id, name: player.profile.name, level: player.profile.level, battle_won: player.profile.battleWon, battle_lost: player.profile.battleLost};
 
-    console.log("avant post");
-    $.post({
+    debugMsg = new DebugMsg(2, "DEBUG", "Mise à jour des infos du joueur en cours...", "console");
+    $.ajax({
         url: '/battle/main', 
+        type: 'POST',
         data: json,
-        dateType: 'json',
-        success: function(data){
-            console.log(data);
-        },
+        dateType: 'json'
     })
-
-    console.log("apres post");
+    .done(function(data){
+        debugMsg = new DebugMsg(2, "DEBUG", "Mise à jour terminée avec succès : ", "console");
+        console.log(data);
+    })
+    .fail(function (jqXHR, textStatus, errorThrown){
+        debugMsg = new DebugMsg(2, "DEBUG", "Une erreur a été produite lors de la tentative de mise à jour : " + textStatus, "console");
+    });
 }
-
-function playerLoose(winner, looser)
-{
-    debugMsg = new DebugMsg(3, "DEBUG", "Vous êtes nul, vous avez perdu face à " + winner.profile.name, "alerte");
-}
-
 
 socketPlayer.socket.on('sendDataToPlayer', (message) => {
     if(message.type == "playerWin")
