@@ -14,15 +14,15 @@
 <div class="container">
 
 <table id='myTable' class='display'>
-<thead><tr><th>Date</th><th>Mode</th><th>Joueur1</th><th>Joueur2</th></tr></thead>
+<thead><tr><th>Date</th><th>Mode</th><th>Joueur1</th><th>Joueur2</th><th>Gagnant</th</tr></thead>
 <tbody>
-@foreach($infosPokemon as $pokemon)
+@foreach($infosBattle as $battle)
 <tr>
-  <td width=20px align='center'>{{$pokemon->name}}</td>
-  <td id = 'EnergiePokemon' width=10px align='center'>{{$pokemon->energy->name}}</td>
-  <td width=20px align='justify'>
-    <img src={{$pokemon->pathImg}} width='90' height='90'><img src={{$pokemon->energy->pathIcon}}>
-  </td> 
+  <td width=20px align='center'>{{$battle->added_at}}</td>
+  <td width=10px align='center'>{{$battle->mode}}</td>
+  <td width=20px align='center'>{{$battle->id_user1}}</td>
+  <td width=20px align='center'>{{$battle->id_user2}}</td>
+  <td width=20px align='center'>{{$battle->winner}}</td>
 </tr>
 
 @endforeach
