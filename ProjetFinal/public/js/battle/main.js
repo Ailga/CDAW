@@ -4,6 +4,7 @@ var battle = new Battle(player, opponent);
 var socketPlayer = new Socket();
 var msgSocket = new MessageToEmit();
 var debugMsg = new DebugMsg();
+var energyIfWin = new Energy();
 
 
 function setObjPlayer(jsonPlayer)
@@ -17,6 +18,12 @@ function setObjListePokemonPlayer(jsonListePokemon)
     debugMsg = new DebugMsg(1, "DEBUG", "Liste pokemon set : " + JSON.stringify(jsonListePokemon), "console");
     recherchePlayer();
 }
+
+function setObjEnergy(jsonEnergy)
+{
+    energyIfWin.setDataFromJson(jsonEnergy);
+}
+
 
 function recherchePlayer()
 {
@@ -269,7 +276,9 @@ function checkIfAllPokemonDied()
 function playerWin(winner, looser)
 {
     battle.winner = winner;
-    debugMsg = new DebugMsg(3, "DEBUG", "Félicitations " + winner.profile.name + ", vous avez gagné la battle face à " + looser.profile.name, "alerte");
+    let energyWin = 
+    let msg = "Félicitations " + winner.profile.name + ", vous avez gagné la battle face à " + looser.profile.name + "\n\n Vous avez une énergie : ";
+    debugMsg = new DebugMsg(3, "DEBUG", msg, "alerte");
     winner.profile.battleWon ++;
     if(winner.profile.battleWon % 10 == 0)
     {
@@ -337,20 +346,21 @@ function saveDataBattleToDB()
     }
 
     json = {
-        duration: battle.chrono.duree, 
+        duration: parseInt(battle.chrono.duree), 
         mode: "autoTour", 
         pokemonJoueur1: jsonPokemonJoueur1, 
         pokemonJoueur2: jsonPokemonJoueur2, 
         winner: battle.winner.profile.name, 
-        id_user1: battle.player.profile.id, 
-        id_user2: battle.opponent.profile.id
+        id_user1: parseInt(battle.player.profile.id), 
+        id_user2: parseInt(battle.opponent.profile.id)
     };
+
 
     debugMsg = new DebugMsg(2, "DEBUG", "Sauvegarde de la battle en cours...", "console");
     $.ajax({
         url: '/battle/save', 
         type: 'POST',
-        data: json,
+        data: JSON.stringify(json),
         dateType: 'json'
     })
     .done(function(data){

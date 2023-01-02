@@ -34,6 +34,18 @@ class DebugMsg {
     }
 }
 
+class Energy{
+    constructor(){
+        this.name = "";
+        this.pathIcon = "";
+    }
+
+    setDataFromJson(jsonEnergy){
+        this.name = jsonEnergy.name;
+        this.pathIcon = jsonEnergy.pathIcon;
+    }
+}
+
 class Pokemon {
 
     constructor() {

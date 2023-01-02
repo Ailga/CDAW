@@ -33,11 +33,27 @@ class Battle extends Model
     public $incrementing = true;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'duration',
+        'mode',
+        'pokemonJoueur1',
+        'pokemonJoueur2',
+        'winner',
+        'id_user1',
+        'id_user2'
+    ];
+
+
+    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool
      */
-    public $timestamps = true;
+    public $timestamps = false;
 
     /**
      * The storage format of the model's date columns.
@@ -51,6 +67,7 @@ class Battle extends Model
      * The names of the columns used to store the timestamps.
      *
      * 
-     */
-    const CREATED_AT = 'added_at';
+     */ 
+    const CREATED_AT = 'created_at';
+
 }

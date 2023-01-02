@@ -44,6 +44,12 @@ class Pokemon extends Model
     }
 
     /**
-     * Fonction de test
+     * Récupère le pokémon associé à l'ID stocké dans la colonne pokemonJoueur1 ou pokemonJoueur2 de la table battle.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
+    public function battlePokemon()
+    {
+        return $this->belongsTo(self::class, 'id');
+    }
 }

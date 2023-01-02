@@ -23,6 +23,7 @@ class CreateBattleTable extends Migration
             $table->string('winner');                 //Contient le pseudo du gagnant
             $table->unsignedBigInteger('id_user1');
             $table->unsignedBigInteger('id_user2');
+
             $table->foreign('id_user1')->references('id')->on('users');
             $table->foreign('id_user2')->references('id')->on('users');
         });
