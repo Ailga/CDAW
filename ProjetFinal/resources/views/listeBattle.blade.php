@@ -16,14 +16,39 @@
 <div class ="masthead">
 <h1> Liste des matchs </h1>
   <div class="container">
-  
+    <script>
+      let durationSec;
+      let textDuration;
+      let battleID;
+      let minutes;
+      let secondes;
+    </script>
+
     <table id='myTable' class='display'>
-    <thead><tr><th>Date</th><th>Mode</th><th>Joueur1</th><th>Joueur2</th><th>Gagnant</th></tr></thead>
+    <thead><tr><th>Date</th><th>Mode</th><th>Durée</th><th>Joueur1</th><th>Joueur2</th><th>Gagnant</th></tr></thead>
     <tbody>
+
     @foreach($infosBattle as $battle)
     <tr>
       <td width=20px align='center'>{{$battle->added_at}}</td>
       <td width=10px align='center'>{{$battle->mode}}</td>
+      <td width=10px align='center' id={{$battle->id}}>
+        <script>
+          durationSec = <?php echo $battle->duration;?>;
+          battleID = <?php echo $battle->id;?>;
+          if(durationSec < 60)
+          {
+            textDuration = durationSec + " secs";
+          }else
+          {
+            let minutes = Math.floor(durationSec / 60);
+            let seconds = durationSec % 60;
+            textDuration = minutes + " min et " + seconds + " sec";
+          }
+          document.getElementById(battleID).innerText = textDuration;
+
+        </script>
+      </td>
       <td width=20px align='center'>{{$battle->user1->name}}</td>
       <td width=20px align='center'>{{$battle->user2->name}}</td>
       <td width=20px align='center'>{{$battle->winner}}</td>

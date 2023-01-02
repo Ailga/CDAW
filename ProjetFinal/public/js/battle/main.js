@@ -40,7 +40,7 @@ function setSearchPageAfterOpponentFound()
         opponent.profile.imgProfil = "/img/battle/imgPhotoProfil.jpg";
     }
     $(".imgPlayerDroite").attr('src', opponent.profile.imgProfil);
-    $(".playerDroite .namePlayer").html(opponent.profile.name + "<br>Level " + opponent.profile.level);
+    $(".playerDroite .namePlayer").html(opponent.profile.name + "<br>Niveau " + opponent.profile.level);
     $(".imgSearch").css("display", "none");
     $(".imgVS").css("display", "initial");
 
@@ -84,8 +84,8 @@ function launchBattleScreen()
     $(".opponent")[0].children[0].children.pokemonOpponentLevel.innerText = " " + pokemonOpponent.level;
     $("#infoOpponent")[0].children.statutOpponent.innerText = "Status : Online ✅"
     $("#infoOpponent #statutOpponent").css("color", "green");
-    $("#infoOpponent")[0].children.name.innerText = "Name : " + battle.opponent.profile.name;
-    $("#infoOpponent")[0].children.level.innerText = "Level : " + battle.opponent.profile.level;
+    $("#infoOpponent")[0].children.name.innerText = "Pseudo : " + battle.opponent.profile.name;
+    $("#infoOpponent")[0].children.level.innerText = "Niveau : " + battle.opponent.profile.level;
     $("#pokemonOpponentImg").attr('src', pokemonOpponent.pathImg);
     $(".ecranGaucheJeu").css("display", "inline");
     $(".ecranDroiteJeu").css("display", "inline");
@@ -229,6 +229,7 @@ function doAttackv2()
 function pokemonPlayerDied()
 {
     let actualPokemonName = player.listePokemons.data[player.listePokemons.index].name;
+    $("#playerBall" + player.listePokemons.index).remove();
     player.listePokemons.index ++;
     let isPokemonDied = checkIfAllPokemonDied();
     if(! isPokemonDied)
@@ -251,14 +252,14 @@ function pokemonPlayerDied()
 
 function checkIfAllPokemonDied()
 {
-    if(opponent.listePokemons.index > 0)
+    if(opponent.listePokemons.index > 2)
     {
         battle.chrono.stopChronometer();
         debugMsg = new DebugMsg(3, "DEBUG", "Opponent a perdu, tous ses pokémons sont morts", "alerte");
         playerWin(player, opponent);
         return true;
     }
-    if(player.listePokemons.index > 0)
+    if(player.listePokemons.index > 2)
     {
         debugMsg = new DebugMsg(3, "DEBUG", "Vous avez perdu, tous vos pokémons sont morts", "alerte");
         msgSocket = new MessageToEmit("all", "sendDataToOpponent", "playerWin", "None", socketPlayer);
@@ -271,7 +272,6 @@ function checkIfAllPokemonDied()
         return false;
     }
 }
-
 
 function playerWin(winner, looser)
 {
@@ -289,7 +289,6 @@ function playerWin(winner, looser)
     saveDataBattleToDB();
 }
 
-
 function playerLoose(winner, looser)
 {
     battle.winner = winner;
@@ -297,7 +296,6 @@ function playerLoose(winner, looser)
     looser.profile.battleLost ++;
     udpateDataPlayerToDB(looser);
 }
-
 
 function udpateDataPlayerToDB(player)
 {
@@ -329,7 +327,6 @@ function udpateDataPlayerToDB(player)
         debugMsg = new DebugMsg(2, "DEBUG", "Une erreur a été produite lors de la tentative de mise à jour : " + errorThrown, "console");
     });
 }
-
 
 function saveDataBattleToDB()
 {
@@ -377,7 +374,6 @@ function saveDataBattleToDB()
     });
 }
 
-
 socketPlayer.socket.on('sendDataToPlayer', (message) => {
     if(message.type == "playerWin")
     {
@@ -391,6 +387,7 @@ socketPlayer.socket.on('sendDataToPlayer', (message) => {
         $(".opponent")[0].children[0].children[0].children.apHP.innerText = newPokemon.hp;
         $(".opponent")[0].children[0].children.pokemonOpponentName.innerText = newPokemon.name;
         $(".opponent")[0].children[0].children.pokemonOpponentLevel.innerText = " " + newPokemon.level;
+        $("#opponentBall" + opponent.listePokemons.index).remove();
         $("#pokemonOpponentImg").attr('src', newPokemon.pathImg);
         opponent.listePokemons.index ++;
         checkIfAllPokemonDied();

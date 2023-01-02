@@ -16,9 +16,17 @@ class battlePokemonsController extends Controller
 {
     function do_battle()
     {
+        $infoPlayerConnected = auth()->user();   
+        $energyPlayer =  $infoPlayerConnected->energies[0]->id_energy;
+        echo $energyPlayer;
+         
         $energyRandomIfWin = Energy::inRandomOrder()->limit(1)->get()[0]; //On choisi une énergie au hasard, au cas où le joueur gagne
-        $infoPlayerConnected = auth()->user();
-        $pokemonsPlayer = Pokemon::inRandomOrder()->limit(3)->get(); //On choisi un pokemon au hasard
+        $pokemonsPlayer = Pokemon::
+                                    where('level', '<=', $infoPlayerConnected->level)
+                                    ->where('id_energy', '=', $energyPlayer)
+                                    ->inRandomOrder()
+                                    ->limit(3)
+                                    ->get(); //On choisi un pokemon au hasard
         return view('battle/main', ['pokemonsPlayer' => $pokemonsPlayer, 'infoPlayerConnected' => $infoPlayerConnected, 'energyRandomIfWin' => $energyRandomIfWin]);
     }
 
