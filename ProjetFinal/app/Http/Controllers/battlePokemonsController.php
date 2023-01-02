@@ -8,6 +8,7 @@ use App\Models\Pokemon;
 use App\Models\User;
 use App\Models\Battle;
 use App\Models\Energy;
+use App\Models\UserEnergy;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Requests\BattleRequest;
 
@@ -15,15 +16,23 @@ class battlePokemonsController extends Controller
 {
     public function do_battle()
     {
-        $ernegyRandomIfWin = Energy::inRandomOrder()->limit(1)->get(); //On choisi une énergie au hasard, au cas où le joueur gagne
+        $energyRandomIfWin = Energy::inRandomOrder()->limit(1)->get()[0]; //On choisi une énergie au hasard, au cas où le joueur gagne
         $infoPlayerConnected = auth()->user();
         $pokemonsPlayer = Pokemon::inRandomOrder()->limit(3)->get(); //On choisi un pokemon au hasard
-        return view('battle/main', ['pokemonsPlayer' => $pokemonsPlayer, 'infoPlayerConnected' => $infoPlayerConnected, 'ernegyRandomIfWin' => $ernegyRandomIfWin]);
+        return view('battle/main', ['pokemonsPlayer' => $pokemonsPlayer, 'infoPlayerConnected' => $infoPlayerConnected, 'energyRandomIfWin' => $energyRandomIfWin]);
     }
 
     public function battle_end_post(UserUpdateRequest $profilUpdate)
     {
         $user = User::find($profilUpdate->id);
+        if($profilUpdate->energyIfWinID != 0)
+        {
+            $energyWin = Energy::find($profilUpdate->energyIfWinID);
+            $userEnergy = UserEnergy::create([
+                'id_energy' => $profilUpdate->energyIfWinID,
+                'id_user' => $profilUpdate->id
+            ]);
+        }
         $user->level = $profilUpdate->level;
         $user->battle_won = $profilUpdate->battle_won;
         $user->battle_lost = $profilUpdate->battle_lost;
@@ -46,8 +55,11 @@ class battlePokemonsController extends Controller
         return $battle;
     }
 
-    public function battle_end_get()
-    {
-        return view('battle/end');
+    public function affiche_bestiaire(){
+        $infosPokemon = Pokemon::get();
+        if(!$infosPokemon){
+            throw new Exception('Impossible de receuillir les informations de la BDD');
+        }
+        return view('listePokemon', ['infosPokemon' => $infosPokemon]);
     }
 }

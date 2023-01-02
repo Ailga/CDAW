@@ -22,8 +22,8 @@ function setObjListePokemonPlayer(jsonListePokemon)
 function setObjEnergy(jsonEnergy)
 {
     energyIfWin.setDataFromJson(jsonEnergy);
+    player.energyIfWin = energyIfWin;
 }
-
 
 function recherchePlayer()
 {
@@ -276,8 +276,7 @@ function checkIfAllPokemonDied()
 function playerWin(winner, looser)
 {
     battle.winner = winner;
-    let energyWin = 
-    let msg = "Félicitations " + winner.profile.name + ", vous avez gagné la battle face à " + looser.profile.name + "\n\n Vous avez une énergie : ";
+    let msg = "Félicitations " + winner.profile.name + ", vous avez gagné la battle face à " + looser.profile.name + "\n\n Vous avez une énergie : " + player.energyIfWin.name;
     debugMsg = new DebugMsg(3, "DEBUG", msg, "alerte");
     winner.profile.battleWon ++;
     if(winner.profile.battleWon % 10 == 0)
@@ -293,6 +292,7 @@ function playerWin(winner, looser)
 
 function playerLoose(winner, looser)
 {
+    battle.winner = winner;
     debugMsg = new DebugMsg(3, "DEBUG", "Vous êtes nul " + looser.profile.name + ", vous avez perdu face à " + winner.profile.name, "alerte");
     looser.profile.battleLost ++;
     udpateDataPlayerToDB(looser);
@@ -307,7 +307,12 @@ function udpateDataPlayerToDB(player)
         }
     });
 
-    json = {id: player.profile.id, name: player.profile.name, level: player.profile.level, battle_won: player.profile.battleWon, battle_lost: player.profile.battleLost};
+    if(player.profile.name != battle.winner.profile.name)
+    {
+        player.energyIfWin.id = 0;          //Si le joueur n'a pas gagné, il ne gagne pas d'energy
+    }
+
+    json = {id: player.profile.id, name: player.profile.name, level: player.profile.level, battle_won: player.profile.battleWon, battle_lost: player.profile.battleLost, energyIfWinID: player.energyIfWin.id};
 
     debugMsg = new DebugMsg(2, "DEBUG", "Mise à jour des infos du joueur en cours...", "console");
     $.ajax({

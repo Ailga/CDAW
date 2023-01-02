@@ -18,7 +18,7 @@ let objPokemonPlayer = objListePokemonsPlayer[0];
 
 let objPlayer = <?php echo $infoPlayerConnected->toJson();?>
 
-let objEnergy = <?php echo $ernegyRandomIfWin->toJson();?>
+let objEnergy = <?php echo $energyRandomIfWin->toJson();?>
 
 let playerOnline = false;
 

@@ -30,10 +30,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/battle', 'battlePokemonsController@do_battle');
     Route::post('/battle/save', 'battlePokemonsController@battle_save');
     Route::post('/battle/main', 'battlePokemonsController@battle_end_post');
-    Route::get('/battle/end', 'battlePokemonsController@battle_end_get');
-    
 });
 
+Route::get('/listeBattle', 'battlePokemonsController@affiche_liste');
 
 Route::get('/liste', 'listePokemonsController@affiche_bestiaire');
 

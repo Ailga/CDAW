@@ -38,9 +38,11 @@ class Energy{
     constructor(){
         this.name = "";
         this.pathIcon = "";
+        this.id = "";
     }
 
     setDataFromJson(jsonEnergy){
+        this.id = jsonEnergy.id;
         this.name = jsonEnergy.name;
         this.pathIcon = jsonEnergy.pathIcon;
     }
@@ -79,6 +81,7 @@ class Player {
         this.listePokemons = {};
         this.status = "objectCreated";
         this.socketID = "";
+        this.energyIfWin = {};
     }
 
     setProfilFromJson(jsonPlayer){
