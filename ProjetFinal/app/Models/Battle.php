@@ -70,4 +70,13 @@ class Battle extends Model
      */ 
     const CREATED_AT = 'created_at';
 
+    public function user1()
+    {
+        return $this->belongsTo(User::class, 'id_user1');
+    }
+
+    public function user2()
+    {
+        return $this->belongsTo(User::class, 'id_user2');
+    }
 }

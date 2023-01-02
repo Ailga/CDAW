@@ -56,7 +56,7 @@ class battlePokemonsController extends Controller
     }
 
     function affiche_liste(){
-        $infosBattle = Battle::get();
+        $infosBattle = Battle::with('user1', 'user2')->get();
         if(!$infosBattle){
             throw new Exception('Impossible de receuillir les informations de la BDD');
         }

@@ -18,45 +18,6 @@ h1{
 	
 }
 
-
-body {
-    width: 100%;
-	margin:  0 auto;
-	background-image: -moz-linear-gradient( 136deg, rgb(0,0,70) 0%, rgb(28,181,224) 100%);
-    background-image: -webkit-linear-gradient( 136deg, rgb(0,0,70) 0%, rgb(28,181,224) 100%);
-    background-image: -ms-linear-gradient( 136deg, rgb(0,0,70) 0%, rgb(28,181,224) 100%);
-	justify-content: center;
-	-o-justify-content: center;
-	-ms-justify-content: center;
-	-moz-justify-content: center;
-	-webkit-justify-content: center;
-	align-items: center;
-	-o-align-items: center;
-	-ms-align-items: center;
-	-moz-align-items: center;
-	-webkit-align-items: center;
-	display:flex;
-}
-
-.container {
-	background: #fff;
-	width: 600px;
-	border-radius: 0px;
-	-o-border-radius: 0px;
-	-ms-border-radius: 0px;
-	-moz-border-radius: 8px;
-	-webkit-border-radius: 8px;
-	margin: 180px 0;
-	font-family: 'Nunito', sans-serif;
-	color: black;
-	font-weight: 700;
-	position: relative;
-	display: flex;
-	
-}
-
-
-
 #myTable_filter{
 	margin: 10px ;
 }
@@ -97,7 +58,6 @@ td {
 	font-size: small;
 	margin: 5px;
 }
-
 
 
 

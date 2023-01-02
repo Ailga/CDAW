@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcomev2');
+    return view('welcome');
 });
 
 Route::get('/dashboard', function () {
@@ -34,7 +34,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/listeBattle', 'battlePokemonsController@affiche_liste');
 
-Route::get('/liste', 'listePokemonsController@affiche_bestiaire');
+Route::get('/listePokemon', 'listePokemonsController@affiche_bestiaire');
 
 Route::get('/user/{name}','UserController@affiche_userEnergy');
 

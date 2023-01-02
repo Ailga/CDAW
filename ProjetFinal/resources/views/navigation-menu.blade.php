@@ -21,6 +21,11 @@
     <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
 	  <div class="container px-5">
 		  <a class="navbar-brand fw-bold" href="/">Pokemon</a>
+      <button class="btn btn-secondary rounded-pill px-3 mb-2 mb-lg-0" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+          <span class="d-flex align-items-center">
+            <a class="small" href="{{ url('/listePokemon') }}">Pokedex</a>
+          </span>
+      </button>
 	  </div>
     </nav>
     <div class="collapse navbar-collapse" id="navbarResponsive">
