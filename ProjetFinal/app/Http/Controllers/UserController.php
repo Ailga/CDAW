@@ -21,4 +21,9 @@ class UserController extends Controller
         }
         return view('listePlayers', ['infosPlayers' => $infosPlayers]);
     }
+
+    function affiche_dashboard(){
+        $infoPlayerConnected = auth()->user();
+        return view('dashboard', ['infoPlayerConnected' => $infoPlayerConnected]);
+    }
 }

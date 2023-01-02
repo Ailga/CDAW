@@ -16,13 +16,10 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             EnergySeeder::class,
-            PokemonSeeder::class
+            PokemonSeeder::class,
+            UserSeeder::class,
+            UserEnergySeeder::class,
+            BattleSeeder::class
         ]);
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
     }
 }

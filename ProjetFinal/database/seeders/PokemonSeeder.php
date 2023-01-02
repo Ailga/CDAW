@@ -29,8 +29,9 @@ class PokemonSeeder extends Seeder
                 {
                     $pokemon = $resultsPokemon[$index - 1];
                     $imgPokemon = $pathImg . $index . ".png";
+                    $level = mt_rand(0, 10);                //Le niveau est nombre aléatoire en 0 et 10
                     list($energyPokemon, $pv_max, $weight, $height, $scoreAttaqueNormale, $scoreAttaqueSpeciale, $scoreDefenseSpeciale) = getInfoFromPokemon($url . "/" . strval($index));
-                    createTableFromAPI($pokemon->{'name'}, $energyPokemon, $pv_max, 0, $weight, $height, $scoreAttaqueNormale, $scoreAttaqueSpeciale, $scoreDefenseSpeciale, $imgPokemon);
+                    createTableFromAPI($pokemon->{'name'}, $energyPokemon, $pv_max, $level, $weight, $height, $scoreAttaqueNormale, $scoreAttaqueSpeciale, $scoreDefenseSpeciale, $imgPokemon);
                     echo "Debug : Pokemon n°" . $index . "/$numberPokemon créé ✅\n";
                 }
             }else{
@@ -39,26 +40,6 @@ class PokemonSeeder extends Seeder
         }
 
         function getIdEnergy($energyPokemon){
-            /*$listEnergy = array(
-                "normal" => "1",
-                "fighting" => "2",
-                "flying" => "3",
-                "poison" => "4",
-                "ground" => "5",
-                "rock" => "6",
-                "bug" => "7",
-                "ghost" => "8",
-                "steel" => "9",
-                "fire" => "10",
-                "water" => "11",
-                "grass" => "12",
-                "electric" => "13",
-                "psychic" => "14",
-                "ice" => "15",
-                "dragon" => "16",
-                "dark" => "17",
-                "fairy" => "18"
-            );*/
             $energies=Energy::where('name',$energyPokemon)->get();
             foreach ($energies as $column_energy) {
                 $id_energy=$column_energy->id;

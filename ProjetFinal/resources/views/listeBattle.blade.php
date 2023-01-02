@@ -60,7 +60,7 @@
       <i>Legende :
         <br>Signification des différents modes de combat : 
           <br><b>"AutoTour"</b> : Le choix des pokemons est tiré aléatoirement mais le combat est en tour par tour.
-          <br><b>"ManuelTour"</b> : Les joueurs vont s'affronter à tour de rôle. Un tour a une durée fixe de 30s.
+          <br><b>"ManualTour"</b> : Les joueurs vont s'affronter à tour de rôle. Un tour a une durée fixe de 30s.
           <br><b>"FullAuto"</b> : 3 pokemons sont tirés aléatoirement, l'ordre dans lequel les pokemons combattent est tirés aléatoirement.
 
 
