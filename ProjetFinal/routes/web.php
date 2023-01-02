@@ -36,6 +36,8 @@ Route::get('/listeBattle', 'battlePokemonsController@affiche_liste');
 
 Route::get('/listePokemon', 'listePokemonsController@affiche_bestiaire');
 
+Route::get('/listePlayer', 'UserController@affiche_liste');
+
 Route::get('/user/{name}','UserController@affiche_userEnergy');
 
 Route::get('/joueurs', function () {

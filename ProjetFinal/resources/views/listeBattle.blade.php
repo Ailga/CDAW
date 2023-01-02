@@ -18,7 +18,7 @@
   <div class="container">
   
     <table id='myTable' class='display'>
-    <thead><tr><th>Date</th><th>Mode</th><th>Joueur1</th><th>Joueur2</th><th>Gagnant</th</tr></thead>
+    <thead><tr><th>Date</th><th>Mode</th><th>Joueur1</th><th>Joueur2</th><th>Gagnant</th></tr></thead>
     <tbody>
     @foreach($infosBattle as $battle)
     <tr>

@@ -89,6 +89,16 @@ body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+
+.btnTopBar{
+  position: absolute;
+  right: 200px;
+}
+
+
+
+
+
 hr {
   margin: 1rem 0;
   color: inherit;
@@ -3095,6 +3105,15 @@ textarea.form-control-lg {
   border-color: #9f1ae2;
 }
 
+.btn-tertiary {
+  color: #fff;
+  background-color: #4f1ae2;
+  border-color: #4f1ae2;
+}
+
+
+
+
 .btn-success {
   color: #fff;
   background-color: #198754;
@@ -3945,6 +3964,7 @@ textarea.form-control-lg {
   margin-bottom: 0;
   list-style: none;
 }
+
 
 .nav-link {
   display: block;

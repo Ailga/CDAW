@@ -21,12 +21,24 @@
     <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
 	  <div class="container px-5">
 		  <a class="navbar-brand fw-bold" href="/">Pokemon</a>
+	  </div>
+    <div class="btnTopBar">
       <button class="btn btn-secondary rounded-pill px-3 mb-2 mb-lg-0" data-bs-toggle="modal" data-bs-target="#feedbackModal">
           <span class="d-flex align-items-center">
             <a class="small" href="{{ url('/listePokemon') }}">Pokedex</a>
           </span>
       </button>
-	  </div>
+      <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+          <span class="d-flex align-items-center">
+            <a class="small" href="{{ url('/listePlayer') }}">Joueurs</a>
+          </span>
+      </button>
+      <button class="btn btn-tertiary rounded-pill px-3 mb-2 mb-lg-0" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+          <span class="d-flex align-items-center">
+            <a class="small" href="{{ url('/listeBattle') }}">Battles</a>
+          </span>
+      </button>
+    </div>
     </nav>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       @auth
@@ -36,6 +48,7 @@
           </span>
         </button>
       @endauth
+
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->

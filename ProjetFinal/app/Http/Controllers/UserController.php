@@ -13,5 +13,12 @@ class UserController extends Controller
         $user = User::where('name',$name)->first();
         return view('user',['user' => $user]);
     }
-    //
+    
+    function affiche_liste(){
+        $infosPlayers = User::get();
+        if(!$infosPlayers){
+            throw new Exception('Impossible de receuillir les informations de la BDD');
+        }
+        return view('listePlayers', ['infosPlayers' => $infosPlayers]);
+    }
 }
