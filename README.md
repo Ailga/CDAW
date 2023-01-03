@@ -1,4 +1,4 @@
-# General information
+# Informations générales
 - **UV** : CDAW
 - **Name** : Fabien Plouvier et Gaëlle Erhart
 - **Date** : 14/11/2022 -> 03/01/2023
