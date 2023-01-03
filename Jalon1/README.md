@@ -12,7 +12,6 @@ Le jalon 1 était répartit en 2 sections :
 - affichage heure courante
 
 ## Route :
-``http://{{ADRESSE}}:{{PORT}}/CDAW/Jalon1/exo01/``
+``http://{{ADRESSE}}:{{PORT}}/CDAW/Jalon1/exo01/``  
+``http://{{ADRESSE}}:{{PORT}}/CDAW/Jalon1/maquette/``
 
-## Remarques :
-La section 2 du jalon (maquette) sera faite le 25/11/2022.
