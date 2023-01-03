@@ -43,7 +43,7 @@ git checkout // main ou Jalons
 ```
 
 *Note:*  
-*Pour le projet laravel final, il faut avoir installé npm sur votre pc avec les modules express et socket.io*  
+*Pour le projet laravel final, les battles, il faut avoir installé npm sur votre pc avec les modules express et socket.io*  
 ```bash
 npm i express
 npm i socket.io
@@ -58,7 +58,7 @@ Pour le **projet laravel final**, ouvrez un terminal, placez vous dans le dossie
 php artisan serve
 ```
 
-De même avec la commande
+De même avec la commande suivante pour faire des battles
 ```
 node server
 ```
